@@ -1,19 +1,21 @@
 # Testing & Typescript Laboration
 
 ## Table of contents 📖
+
 1. [Introduction](#introduction)
 2. [Built with](#built-with-%EF%B8%8F)
 3. [Getting started](#getting-started-)
-    1. [Prerequisites](#prerequisites-)
-    2. [Manually](#manually-%EF%B8%8F)
-    3. [Docker](#docker-)
+   1. [Prerequisites](#prerequisites-)
+   2. [Manually](#manually-%EF%B8%8F)
+   3. [Docker](#docker-)
 4. [Documentation](#documentation-)
-  1. [UML Sequence Diagram](#uml-sequence-diagram) 
+   1. [UML Sequence Diagram](#uml-sequence-diagram)
+   2. [UML Class Diagram API](#uml-class-diagram-api)
 5. [License](#)
 
 ## Introduction
 
-This project is a simple quiz-app where users can play quizes in both single & multiplayer, at the end of a game they get the results and statistics. 
+This project is a simple quiz-app where users can play quizes in both single & multiplayer, at the end of a game they get the results and statistics.
 
 ## Built with 🛠️
 
@@ -32,12 +34,12 @@ This guide will help you get the project up and running on your local machine, e
 
 If you want to run the project with docker you need to have the following installed:
 
--   [Docker](https://docs.docker.com/get-docker/)
--   [Docker Compose](https://docs.docker.com/compose/install/)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 If you want to run the project without docker you need to have the following installed:
 
--   [Node.js](https://nodejs.org/en/download/)
+- [Node.js](https://nodejs.org/en/download/)
 
 ### Manually 🛠️
 
@@ -67,7 +69,6 @@ npm run dev
 
 ### Docker 🐳
 
-
 1. Clone the repo
 
 ```sh
@@ -93,6 +94,10 @@ The frontend will be available at [http://127.0.0.1:5173](http://127.0.0.1:5173)
 ### UML Sequence Diagram
 
 The UML Sequence Diagram can be found [here](docs/sequenceDiagram.md)
+
+### UML Class Diagram API
+
+The UML Class Diagram API can be found [here](docs/classDiagramAPI.md)
 
 ## License ⚠️
 
