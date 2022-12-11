@@ -9,8 +9,9 @@
    2. [Manually](#manually-%EF%B8%8F)
    3. [Docker](#docker-)
 4. [Documentation](#documentation-)
-   1. [UML Sequence Diagram](#uml-sequence-diagram)
-   2. [UML Class Diagram API](#uml-class-diagram-api)
+   1. [Figma](#figma)
+   2. [UML Sequence Diagram](#uml-sequence-diagram)
+   3. [UML Class Diagram API](#uml-class-diagram-api)
 5. [License](#)
 
 ## Introduction
@@ -91,13 +92,18 @@ The frontend will be available at [http://127.0.0.1:5173](http://127.0.0.1:5173)
 
 ## Documentation 📖
 
+### Figma
+
+The figma can be found [here](https://www.figma.com/file/cuS6InQjRn5unuer58cgD5/Testing-%26-Typescript-Laboration-1?node-id=7%3A367&t=DGA5jhKJV1e9mdjP-1).
+(Demo can be found [here](https://www.figma.com/proto/cuS6InQjRn5unuer58cgD5/Testing-%26-Typescript-Laboration-1?node-id=7%3A368&scaling=min-zoom&page-id=7%3A367&starting-point-node-id=7%3A368&show-proto-sidebar=1))
+
 ### UML Sequence Diagram
 
-The UML Sequence Diagram can be found [here](docs/sequenceDiagram.md)
+The UML Sequence Diagram can be found [here](docs/sequenceDiagram.md).
 
 ### UML Class Diagram API
 
-The UML Class Diagram API can be found [here](docs/classDiagramAPI.md)
+The UML Class Diagram API can be found [here](docs/classDiagramAPI.md).
 
 ## License ⚠️
 
