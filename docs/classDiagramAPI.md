@@ -14,6 +14,7 @@ classDiagram
     class AuthGuard{
       +canActivate(ExecutionContext context) Promise~boolean~
     }
+    AuthGuard --|> main
 
     class HealthModule
     class HealthController{
@@ -64,20 +65,16 @@ classDiagram
     HealthModule <|-- HealthController
     HealthModule <|-- HealthService
 
-    HealthController <|-- AuthGuard
     HealthService --|> HealthController
 
     OptionsModule <|-- OptionsController
     OptionsModule <|-- OptionsService
 
-    OptionsController <|-- AuthGuard
     OptionsService --|> OptionsController
 
     GameModule <|-- GameController
     GameModule <|-- GameService
 
-    GameController <|-- AuthGuard
-    GameGateway <|-- AuthGuard
     GameService --|> GameGateway
     GameService --|> GameController
     GameModule <|-- GameGateway
