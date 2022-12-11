@@ -11,17 +11,14 @@ sequenceDiagram
 %% Login
 U->>PC: Visits site
 loop
-    PC->>PA: Send user token
-    PA->>A0: Send user token
+    PC->>A0: Send user token
     alt Valid token
-        A0->>PA: Send user details
         break User is authenticated
-            PA->>PC: Send user details
+            A0->>PC: Send user details
         end
 
     else Invalid token
-        A0->>PA: Invalid token
-        PA->>PC: User is not authenticated, redirect to auth0
+        A0->>PC: User is not authenticated, redirect to auth0
         PC->>U: Redirect to Auth0 login
         U->>A0: User log in with Auth0
         A0->>PC: Sends users authentication token

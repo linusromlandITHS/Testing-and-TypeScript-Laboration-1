@@ -40,7 +40,8 @@ classDiagram
         +joinGame() Promise~GameInformation~
     }
     class GameGateway{
-        handleMatchEvent(MatchEvent data)
+        -constructor(GameService gameService)
+        +handleMatchEvent(MatchEvent data)
     }
     class GameService{
         -GameInformation[] games
@@ -73,11 +74,11 @@ classDiagram
     OptionsService --|> OptionsController
 
     GameModule <|-- GameController
-    GameModule <|-- GameGateway
     GameModule <|-- GameService
 
     GameController <|-- AuthGuard
     GameGateway <|-- AuthGuard
-    GameService <|-- GameGateway
+    GameService --|> GameGateway
     GameService --|> GameController
+    GameModule <|-- GameGateway
 ```
