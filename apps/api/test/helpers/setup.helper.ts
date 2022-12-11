@@ -2,7 +2,7 @@ import 'tsconfig-paths/register';
 import { AppModule } from '$src/app.module';
 import { Test, TestingModule } from '@nestjs/testing';
 
-const setupTest = async () => {
+const setupTest = async (): Promise<void> => {
 	const moduleFixture: TestingModule = await Test.createTestingModule({
 		imports: [AppModule]
 	}).compile();

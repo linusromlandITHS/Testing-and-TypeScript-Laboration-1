@@ -6,7 +6,7 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AuthGuard } from './guards/auth.guard';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
 	const app: INestApplication = await NestFactory.create(AppModule);
 	app.useGlobalGuards(new AuthGuard());
 	await app.listen(3000);
