@@ -11,7 +11,7 @@ describe('AuthGuard', () => {
 	let authGuard: AuthGuard;
 	let mockContext: any;
 
-	const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_AUDIENCE } = process.env;
+	const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_TEST_USERNAME, AUTH0_TEST_PASSWORD } = process.env;
 
 	beforeEach(async () => {
 		authGuard = new AuthGuard();
@@ -49,10 +49,12 @@ describe('AuthGuard', () => {
 
 		const observable: Observable<Auth0M2MObject> = httpService
 			.post(`https://${AUTH0_DOMAIN}/oauth/token`, {
+				username: AUTH0_TEST_USERNAME,
+				password: AUTH0_TEST_PASSWORD,
 				client_id: AUTH0_CLIENT_ID,
 				client_secret: AUTH0_CLIENT_SECRET,
 				audience: `https://${AUTH0_DOMAIN}/api/v2/`,
-				grant_type: 'client_credentials'
+				grant_type: 'password'
 			})
 			.pipe(map((response: AxiosResponse) => response.data));
 
