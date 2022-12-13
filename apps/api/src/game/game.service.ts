@@ -18,13 +18,14 @@ export class GameService {
 	private games: GameInformation[] = [];
 
 	async createGame(token: string): Promise<GameInformation> {
-		const user: Player = await getUserInformation(token);
+		const user: Player = await getUserInformation(token); // Get the user's information from the auth server
 
-		if (!user) return null;
+		if (!user) return null; // If the user doesn't exist, return null
 
 		const game: GameInformation = {
-			id: generateGameId(this.games.map((game: GameInformation) => game.id)),
+			id: generateGameId(this.games.map((game: GameInformation) => game.id)), // Generate a unique game ID
 			settings: {
+				// Set the default settings
 				questionCount: DEFAULT_QUESTION_COUNT,
 				questionTime: DEFAULT_QUESTION_TIME,
 				region: DEFAULT_QUESTION_REGION,
@@ -34,6 +35,7 @@ export class GameService {
 			questions: [],
 			answers: [],
 			players: [
+				// Add the host to the player list
 				{
 					...user,
 					host: true
@@ -41,8 +43,8 @@ export class GameService {
 			]
 		};
 
-		this.games.push(game);
+		this.games.push(game); // Add the game to the list of games
 
-		return game;
+		return game; // Return the game
 	}
 }

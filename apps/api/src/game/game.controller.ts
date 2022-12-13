@@ -11,6 +11,7 @@ export class GameController {
 
 	@Post()
 	async createGame(@Headers('Authorization') token: string): Promise<GameInformation> {
-		return await this.gameService.createGame(token.split(' ')[1]);
+		token = token.split(' ')[1]; // Remove the "Bearer " from the token
+		return await this.gameService.createGame(token);
 	}
 }

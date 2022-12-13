@@ -5,6 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OptionsController } from './options.controller';
 import { OptionsService } from './options.service';
 import { Options } from '_packages/shared-types';
+import checkOptions from '$src/../test/helpers/checkOptions';
 
 describe('OptionsController', () => {
 	let controller: OptionsController;
@@ -27,14 +28,7 @@ describe('OptionsController', () => {
 		const fields: string[] = ['categories', 'tags', 'regions', 'difficulties'];
 
 		for (const field of fields) {
-			testOptions(options, field);
+			checkOptions(options, field);
 		}
 	});
 });
-
-function testOptions(options: Options, field: string): void {
-	expect(options).toHaveProperty(field, expect.any(Array));
-	expect(options[field].length).toBeGreaterThan(0);
-	expect(options[field][0]).toHaveProperty('label', expect.any(String));
-	expect(options[field][0]).toHaveProperty('value', expect.any(String));
-}
