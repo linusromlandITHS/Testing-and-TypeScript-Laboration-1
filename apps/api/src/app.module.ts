@@ -4,13 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 
 // Internal dependencies
 import { HealthModule } from './health/health.module';
+import { OptionsModule } from './options/options.module';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true
 		}),
-		HealthModule
+		HealthModule,
+		OptionsModule
 	]
 })
 export class AppModule {}
