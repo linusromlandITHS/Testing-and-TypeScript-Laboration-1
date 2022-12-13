@@ -1,7 +1,3 @@
-//Setup dotenv to load environment variables
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 // External dependencies
 import { ExecutionContext } from '@nestjs/common';
 import { createMock } from '@golevelup/ts-jest';
@@ -44,7 +40,7 @@ describe('AuthGuard', () => {
 			.post(`https://${AUTH0_DOMAIN}/oauth/token`, {
 				client_id: AUTH0_CLIENT_ID,
 				client_secret: AUTH0_CLIENT_SECRET,
-				audience: AUTH0_AUDIENCE,
+				audience: `https://${AUTH0_DOMAIN}/api/v2/`,
 				grant_type: 'client_credentials'
 			})
 			.pipe(map((response: AxiosResponse) => response.data));
