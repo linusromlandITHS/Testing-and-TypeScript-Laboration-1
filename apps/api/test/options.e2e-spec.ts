@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import checkOptions from './helpers/checkOptions';
+import checkOptions from './helpers/checkOptions.helper';
 
 describe('Options', () => {
 	it('/ (GET)', () => {
