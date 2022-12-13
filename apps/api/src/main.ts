@@ -1,3 +1,7 @@
+// Load environment variables
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 // External dependencies
 import { NestFactory } from '@nestjs/core';
 import { INestApplication } from '@nestjs/common';
