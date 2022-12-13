@@ -1,5 +1,5 @@
 // External dependencies
-import { Controller, Post, Headers } from '@nestjs/common';
+import { Controller, Post, Headers, Param, Get, HttpStatus } from '@nestjs/common';
 
 // Internal dependencies
 import { GameInformation } from '_packages/shared-types';
@@ -13,5 +13,14 @@ export class GameController {
 	async createGame(@Headers('Authorization') token: string): Promise<GameInformation> {
 		token = token.split(' ')[1]; // Remove the "Bearer " from the token
 		return await this.gameService.createGame(token);
+	}
+
+	@Get(':gameId')
+	joinGame(@Param('gameId') gameId: string): GameInformation | HttpStatus {
+		const game: GameInformation = this.gameService.joinGame(gameId);
+
+		if (!game) return HttpStatus.NOT_FOUND; // If the game doesn't exist, return null
+
+		return game; // Return the game
 	}
 }

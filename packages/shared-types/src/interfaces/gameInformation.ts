@@ -11,7 +11,7 @@ interface Question {
 	questionId: string;
 	question: string;
 	answers: string[];
-	correctAnswer: string;
+	correctAnswer?: string;
 }
 
 interface PlayerAnswer {

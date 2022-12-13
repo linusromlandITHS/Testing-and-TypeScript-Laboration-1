@@ -47,4 +47,12 @@ export class GameService {
 
 		return game; // Return the game
 	}
+
+	joinGame(gameId: string): GameInformation {
+		const game: GameInformation = this.games.find((game: GameInformation) => game.id === gameId); // Find the game
+
+		if (!game) return null; // If the game doesn't exist, return null
+
+		return game; // Return the game
+	}
 }
