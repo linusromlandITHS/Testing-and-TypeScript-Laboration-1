@@ -28,6 +28,7 @@ interface Answer {
 interface Player {
 	id: string;
 	name: string;
+	email: string;
 	imageURL: string;
 	score?: number;
 	host?: boolean;

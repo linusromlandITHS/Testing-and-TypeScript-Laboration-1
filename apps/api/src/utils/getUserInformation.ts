@@ -13,6 +13,7 @@ export default async function getUserInformation(token: string): Promise<Player>
 	return {
 		id: data.sub,
 		name: data.nickname,
+		email: data.email,
 		imageURL: data.picture
 	};
 }

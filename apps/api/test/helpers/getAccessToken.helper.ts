@@ -21,7 +21,8 @@ export default async function getAccessToken(): Promise<string> {
 			client_id: AUTH0_CLIENT_ID,
 			client_secret: AUTH0_CLIENT_SECRET,
 			audience: `https://${AUTH0_DOMAIN}/api/v2/`,
-			grant_type: 'password'
+			grant_type: 'password',
+			scope: 'openid'
 		})
 		.pipe(map((response: AxiosResponse) => response.data));
 
