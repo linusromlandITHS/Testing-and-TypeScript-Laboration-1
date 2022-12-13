@@ -22,7 +22,18 @@ describe('AuthGuard', () => {
 		expect(authGuard).toBeDefined();
 	});
 
-	it('should return false since token is invalid', async () => {
+	it('should return false when not passing token', async () => {
+		const result: boolean = await authGuard.canActivate(mockContext);
+		expect(result).toEqual(false);
+	});
+
+	it('should return false when passing invalid token', async () => {
+		mockContext.switchToHttp().getRequest.mockReturnValue({
+			headers: {
+				authorization: 'Bearer invalidToken'
+			}
+		});
+
 		const result: boolean = await authGuard.canActivate(mockContext);
 		expect(result).toEqual(false);
 	});
