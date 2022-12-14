@@ -63,7 +63,10 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		game.settings = data.settings; // Change the settings
+		//Loop through all the settings keys and update the game's settings as a for in loop
+		for (const key in data.settings) {
+			game.settings[key] = data.settings[key];
+		}
 
 		return game; // Return the game
 	}

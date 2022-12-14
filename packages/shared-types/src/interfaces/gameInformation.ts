@@ -1,11 +1,11 @@
 import { GameStatus, PlayerStatus } from '../enums';
 
 interface Settings {
-	questionCount: number;
-	questionTime: number;
-	region: string;
-	category: string;
-	difficulty: string;
+	questionCount?: number;
+	questionTime?: number;
+	region?: string;
+	category?: string;
+	difficulty?: string;
 	tag?: string;
 }
 
