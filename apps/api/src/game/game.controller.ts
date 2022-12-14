@@ -16,8 +16,13 @@ export class GameController {
 	}
 
 	@Get(':gameId')
-	joinGame(@Param('gameId') gameId: string): GameInformation | HttpStatus {
-		const game: GameInformation = this.gameService.joinGame(gameId);
+	async joinGame(
+		@Param('gameId') gameId: string,
+		@Headers('Authorization') token: string
+	): Promise<GameInformation | HttpStatus> {
+		token = token.split(' ')[1]; // Remove the "Bearer " from the token
+
+		const game: GameInformation = await this.gameService.joinGame(token, gameId);
 
 		if (!game) return HttpStatus.NOT_FOUND; // If the game doesn't exist, return null
 

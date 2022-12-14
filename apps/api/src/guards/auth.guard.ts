@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
 
 				token = request.headers['authorization']?.split(' ')[1];
 			}
-
 			if (!token) return false;
 
 			//Validate auth0 jwt token
