@@ -41,6 +41,8 @@ interface GameInformation {
 	status: GameStatus;
 	settings: Settings;
 	questions: Question[];
+	previousQuestions: Question[];
+	activeQuestion?: Question;
 	answers: Answer[];
 	players: Player[];
 }

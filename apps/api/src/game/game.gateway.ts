@@ -14,8 +14,8 @@ export class GameGateway {
 	constructor(private readonly gameService: GameService) {}
 
 	private readonly events = {
-		changeSettings: this.gameService.changeSettings
-		// startGame: this.gameService.startGame
+		changeSettings: this.gameService.changeSettings,
+		startGame: this.gameService.startGame
 	};
 
 	@UseGuards(AuthGuard)
@@ -37,7 +37,7 @@ export class GameGateway {
 			if (!data.gamePin) return console.log('No game pin provided');
 
 			if (data.event in this.events) {
-				const gameInformation: GameInformation = this.events[data.event](data, userInformation);
+				const gameInformation: GameInformation = await this.events[data.event](data, userInformation, client);
 
 				if (!gameInformation) return console.log('Game not found');
 
