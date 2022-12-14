@@ -1,15 +1,26 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { decode, Jwt, JwtPayload, verify } from 'jsonwebtoken';
 import { JwksClient, SigningKey } from 'jwks-rsa';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		try {
 			const { AUTH0_DOMAIN } = process.env;
-			const request: Request = context.switchToHttp().getRequest();
 
-			const token: string = request.headers['authorization']?.split(' ')[1];
+			let token: string;
+
+			//Check if request is http or ws
+			if (context.getType() === 'ws') {
+				const client: Socket = context.switchToWs().getClient();
+
+				token = client.handshake.headers['authorization']?.split(' ')[1];
+			} else {
+				const request: Request = context.switchToHttp().getRequest();
+
+				token = request.headers['authorization']?.split(' ')[1];
+			}
 
 			if (!token) return false;
 
@@ -26,6 +37,7 @@ export class AuthGuard implements CanActivate {
 			const verifiedToken: string | JwtPayload = verify(token, key.getPublicKey(), {
 				algorithms: ['RS256']
 			});
+
 			if (!verifiedToken) return false;
 			return true;
 		} catch (error) {

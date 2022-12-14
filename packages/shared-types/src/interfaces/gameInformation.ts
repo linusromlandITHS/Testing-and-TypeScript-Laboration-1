@@ -1,3 +1,5 @@
+import { GameStatus, PlayerStatus } from '../enums';
+
 interface Settings {
 	questionCount: number;
 	questionTime: number;
@@ -31,11 +33,12 @@ interface Player {
 	email: string;
 	imageURL: string;
 	score?: number;
-	host?: boolean;
+	status?: PlayerStatus;
 }
 
 interface GameInformation {
 	id: string;
+	status: GameStatus;
 	settings: Settings;
 	questions: Question[];
 	answers: Answer[];

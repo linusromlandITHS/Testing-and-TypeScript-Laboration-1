@@ -15,7 +15,7 @@
 		"start:prod": "node dist/main",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
 		"test": "jest --setupFiles dotenv/config",
-		"test:e2e": "jest --setupFiles dotenv/config --config ./test/jest-e2e.json"
+		"test:e2e": "jest --setupFiles dotenv/config --config ./test/jest-e2e.json --runInBand"
 	},
 	"dependencies": {
 		"@golevelup/ts-jest": "^0.3.4",
@@ -24,6 +24,7 @@
 		"@nestjs/core": "^9.0.0",
 		"@nestjs/mapped-types": "*",
 		"@nestjs/platform-fastify": "^9.2.1",
+		"@nestjs/platform-socket.io": "^9.2.1",
 		"@nestjs/terminus": "^9.1.4",
 		"@nestjs/websockets": "^9.2.1",
 		"axios": "^1.2.1",
@@ -32,7 +33,9 @@
 		"jwks-rsa": "^3.0.0",
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",
-		"rxjs": "^7.2.0"
+		"rxjs": "^7.2.0",
+		"shared-enums": "*",
+		"shared-types": "*"
 	},
 	"devDependencies": {
 		"@nestjs/cli": "^9.0.0",
