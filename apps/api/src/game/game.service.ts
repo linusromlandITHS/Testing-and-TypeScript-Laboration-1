@@ -163,20 +163,33 @@ export class GameService {
 			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
 			updatedGame.activeQuestion = null;
 
-			//Calculate the scores by seconds left times the difficulty plus the amount of right answers times the amount of guessed answers in a row
+			//Calculate the scores
 			for (const player of updatedGame.players) {
-				const difficultyMultiplier: number =
-					updatedGame.settings.difficulty === 'easy' ? 1 : updatedGame.settings.difficulty === 'medium' ? 2 : 3;
 				let score: number = 0;
+				let streak: number = 0;
 				//Loop through the keys of the answers
 				for (const key in updatedGame.answers) {
 					//If the key is the player's id and the answer is correct, add 1 to the correct answer
-					if (!updatedGame.answers[key][player.id].correct) continue;
+					if (!updatedGame.answers[key][player.id].correct) {
+						streak = 0;
+						continue;
+					}
+					streak++;
+
 					const time: number = updatedGame.answers[key][player.id].time / 1000;
-					const timeLeft: number = updatedGame.settings.questionTime - time;
-					score = difficultyMultiplier * timeLeft;
+					//Calculate after how many seconds the player answered the question
+					const responseTime: number = updatedGame.settings.questionTime - time;
+
+					score += Math.round((1 - responseTime / updatedGame.settings.questionTime / 2) * 1000);
+
+					//Check if stream is higher or equal to 3
+					if (streak >= 3) {
+						console.log(Math.round(Math.log(streak) * 100));
+						//Logarithmic function to calculate the streak bonus
+						score += Math.round(Math.log(streak) * 100);
+					}
 				}
-				player.score = Math.round(score * 10);
+				player.score = score;
 			}
 
 			//Sort the players by score
