@@ -1,3 +1,4 @@
+import { PlayerStatus } from '../enums';
 import { Settings } from './gameInformation';
 
 type SocketData = {
@@ -6,6 +7,7 @@ type SocketData = {
 	settings?: Settings;
 	questionId?: string;
 	answer?: string;
+	status?: PlayerStatus;
 };
 
 export default SocketData;

@@ -15,6 +15,7 @@ export class GameGateway {
 
 	private readonly events = {
 		changeSettings: this.gameService.changeSettings,
+		changePlayerStatus: this.gameService.changePlayerStatus,
 		startGame: this.gameService.startGame,
 		nextQuestion: this.gameService.nextQuestion,
 		answerQuestion: this.gameService.answerQuestion

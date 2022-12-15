@@ -94,6 +94,27 @@ export class GameService {
 		return game; // Return the game
 	}
 
+	async changePlayerStatus(data: SocketData, user: Player): Promise<GameInformation> {
+		console.log('changePlayerStatus');
+		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+		console.log(`Game is ${game ? 'found' : 'not found'}`);
+		if (!game) return null; // If the game doesn't exist, return null
+
+		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
+
+		console.log(`Player is ${player ? 'found' : 'not found'}`);
+		if (!player) return null; // If the player doesn't exist, return null
+
+		if (player.status == PlayerStatus.HOST) return null; //Check if the player the host
+
+		console.log(`Player ${user.id} changed status to ${data.status}`);
+
+		//Update the player's status
+		game.players.find((player: Player) => player.id === user.id).status = data.status;
+
+		return game; // Return the game
+	}
+
 	async startGame(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
 		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
