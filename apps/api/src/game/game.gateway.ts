@@ -5,7 +5,7 @@ import { Socket } from 'socket.io';
 
 // Internal Dependencies
 import { AuthGuard } from '$src/guards/auth.guard';
-import { GameInformation, Player, SocketData } from '_packages/shared-types';
+import { GameInformation, Player, SocketData } from '_packages/shared/src/types';
 import { GameService } from './game.service';
 import getUserInformation from '$src/utils/getUserInformation';
 

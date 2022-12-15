@@ -4,8 +4,8 @@ import { AxiosResponse } from 'axios';
 import { Socket } from 'socket.io';
 
 // Internal dependencies
-import { GameInformation, Player, Question, SocketData } from '_packages/shared-types';
-import { GameStatus, PlayerStatus } from '_packages/shared-types/src/enums';
+import { GameInformation, Player, Question, SocketData } from '_packages/shared/src/types';
+import { GameStatus, PlayerStatus } from '_packages/shared/src/enums';
 import generateGameId from '$src/utils/generateGameId';
 import getUserInformation from '$src/utils/getUserInformation';
 import axios from '$src/utils/axios';
@@ -18,7 +18,7 @@ import {
 	DEFAULT_QUESTION_CATEGORY
 } from '$src/utils/env';
 
-const games: GameInformation[] = [];
+const _games: GameInformation[] = [];
 
 @Injectable()
 export class GameService {
@@ -28,7 +28,7 @@ export class GameService {
 		if (!user) return null; // If the user doesn't exist, return null
 
 		const game: GameInformation = {
-			id: generateGameId(games.map((game: GameInformation) => game.id)), // Generate a unique game ID
+			id: generateGameId(_games.map((game: GameInformation) => game.id)), // Generate a unique game ID
 			status: GameStatus.JOINING,
 			settings: {
 				isPrivate: true,
@@ -51,7 +51,7 @@ export class GameService {
 			]
 		};
 
-		games.push(game); // Add the game to the list of games
+		_games.push(game); // Add the game to the list of games
 
 		return game; // Return the game
 	}
@@ -61,7 +61,7 @@ export class GameService {
 
 		if (!user) return null; // If the user doesn't exist, return null
 
-		const game: GameInformation = games.find((game: GameInformation) => game.id === gameId); // Find the game
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === gameId); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -77,7 +77,7 @@ export class GameService {
 	}
 
 	async changeSettings(data: SocketData, user: Player): Promise<GameInformation> {
-		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -97,7 +97,7 @@ export class GameService {
 
 	async changePlayerStatus(data: SocketData, user: Player): Promise<GameInformation> {
 		console.log('changePlayerStatus');
-		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 		console.log(`Game is ${game ? 'found' : 'not found'}`);
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -117,7 +117,7 @@ export class GameService {
 	}
 
 	async startGame(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
-		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -151,7 +151,7 @@ export class GameService {
 	}
 
 	async nextQuestion(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
-		const game: GameInformation = games.find((g: GameInformation) => g.id === data.gamePin); // Find the game
+		const game: GameInformation = _games.find((g: GameInformation) => g.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -162,7 +162,7 @@ export class GameService {
 		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
 
 		function changeToLeaderboard(endGame: boolean = false): void {
-			const updatedGame: GameInformation = games.find((g: GameInformation) => g.id === data.gamePin);
+			const updatedGame: GameInformation = _games.find((g: GameInformation) => g.id === data.gamePin);
 			updatedGame.status = GameStatus.LEADERBOARD;
 			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
 			updatedGame.activeQuestion = null;
@@ -195,7 +195,7 @@ export class GameService {
 
 			if (endGame) {
 				//Remove the game from the list of games
-				games.splice(games.indexOf(updatedGame), 1);
+				_games.splice(_games.indexOf(updatedGame), 1);
 				return;
 			}
 		}
@@ -222,7 +222,7 @@ export class GameService {
 	}
 
 	async answerQuestion(data: SocketData, user: Player): Promise<void> {
-		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 

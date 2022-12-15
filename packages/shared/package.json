@@ -1,0 +1,6 @@
+{
+	"name": "shared",
+	"dependencies": {
+		"typescript": "4.9.3"
+	}
+}

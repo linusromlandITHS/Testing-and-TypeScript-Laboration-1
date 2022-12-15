@@ -6,7 +6,7 @@ import { HttpStatus } from '@nestjs/common';
 import getAccessToken from '$src/../test/helpers/getAccessToken.helper';
 import { GameController } from './game.controller';
 import { GameService } from './game.service';
-import { GameInformation } from '_packages/shared-types/src';
+import { GameInformation } from '_packages/shared/src/types';
 import {
 	DEFAULT_QUESTION_COUNT,
 	DEFAULT_QUESTION_TIME,
@@ -15,7 +15,7 @@ import {
 	DEFAULT_QUESTION_CATEGORY,
 	AUTH0_TEST_USERNAME
 } from '$src/utils/env';
-import { PlayerStatus } from '_packages/shared-types/src/enums';
+import { PlayerStatus } from '_packages/shared/src/enums';
 
 describe('GameController', () => {
 	let controller: GameController;

@@ -3,7 +3,7 @@ import { Controller, Get } from '@nestjs/common';
 
 // Internal dependencies
 import { HealthService } from './health.service';
-import { HealthResult } from '_packages/shared-types/src';
+import { HealthResult } from '_packages/shared/src/types';
 
 @Controller('health')
 export class HealthController {

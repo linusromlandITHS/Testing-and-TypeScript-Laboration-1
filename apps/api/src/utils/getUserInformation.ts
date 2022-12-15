@@ -1,6 +1,6 @@
 // Internal dependencies
 import axios from './axios';
-import { Player } from '_packages/shared-types';
+import { Player } from '_packages/shared/src/types';
 import { AUTH0_DOMAIN } from './env';
 
 export default async function getUserInformation(token: string): Promise<Player> {

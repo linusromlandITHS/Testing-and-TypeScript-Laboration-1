@@ -1,3 +1,4 @@
+// External dependencies
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { decode, Jwt, JwtPayload, verify } from 'jsonwebtoken';
 import { JwksClient, SigningKey } from 'jwks-rsa';

@@ -2,7 +2,7 @@
 import { Controller, Post, Headers, Param, Get, HttpStatus } from '@nestjs/common';
 
 // Internal dependencies
-import { GameInformation } from '_packages/shared-types';
+import { GameInformation } from '_packages/shared/src/types';
 import { GameService } from './game.service';
 
 @Controller('game')
