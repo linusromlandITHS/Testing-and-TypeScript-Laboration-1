@@ -5,7 +5,7 @@ import { Socket } from 'socket.io';
 
 // Internal dependencies
 import { GameInformation, Player, Question, SocketData } from '_packages/shared-types';
-import { GameStatus, PlayerStatus } from '_packages/shared-types/src/enums';
+import { GameStatus, PlayerStatus, Comparator } from '_packages/shared-types/src/enums';
 import generateGameId from '$src/utils/generateGameId';
 import getUserInformation from '$src/utils/getUserInformation';
 import axios from '$src/utils/axios';
@@ -17,7 +17,6 @@ import {
 	DEFAULT_QUESTION_DIFFICULTY,
 	DEFAULT_QUESTION_CATEGORY
 } from '$src/utils/env';
-import { stringify } from 'querystring';
 
 const games: GameInformation[] = [];
 
@@ -116,13 +115,15 @@ export class GameService {
 		if (response.data.length < game.settings.questionCount) return null; // If the response doesn't have enough questions, return null
 
 		// Set the game's questions to the response data
-		game.questions = response.data.map((q: { id: any; question: any; incorrectAnswers: any; correctAnswer: any }) => ({
-			// Set the game's questions to the response data
-			questionId: q.id,
-			question: q.question,
-			answers: [...q.incorrectAnswers, q.correctAnswer],
-			correctAnswer: q.correctAnswer
-		}));
+		game.questions = response.data.map(
+			(q: { id: string; question: string; incorrectAnswers: string; correctAnswer: string }) => ({
+				// Set the game's questions to the response data
+				questionId: q.id,
+				question: q.question,
+				answers: [...q.incorrectAnswers, q.correctAnswer].sort(() => Math.random() - 0.5), // Shuffle the answers
+				correctAnswer: q.correctAnswer
+			})
+		);
 
 		return await this.nextQuestion(data, user, client); // Return the game
 	}
@@ -138,13 +139,30 @@ export class GameService {
 
 		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
 
-		function changeToLeaderboard(): void {
+		function changeToLeaderboard(endGame: boolean = false): void {
 			const updatedGame: GameInformation = games.find((g: GameInformation) => g.id === data.gamePin);
 			updatedGame.status = GameStatus.LEADERBOARD;
 			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
 			updatedGame.activeQuestion = null;
 
-			console.log(updatedGame);
+			//Calculate the scores by seconds left times the difficulty plus the amount of right answers times the amount of guessed answers in a row
+			for (const player of updatedGame.players) {
+				const difficultyMultiplier: number =
+					updatedGame.settings.difficulty === 'easy' ? 1 : updatedGame.settings.difficulty === 'medium' ? 2 : 3;
+				let score: number = 0;
+				//Loop through the keys of the answers
+				for (const key in updatedGame.answers) {
+					//If the key is the player's id and the answer is correct, add 1 to the correct answer
+					if (!updatedGame.answers[key][player.id].correct) continue;
+					const time: number = updatedGame.answers[key][player.id].time / 1000;
+					const timeLeft: number = updatedGame.settings.questionTime - time;
+					score = difficultyMultiplier * timeLeft;
+				}
+				player.score = Math.round(score);
+			}
+
+			//Sort the players by score
+			updatedGame.players.sort((a: Player, b: Player) => b.score - a.score);
 
 			const gameData: any = {
 				...updatedGame,
@@ -152,10 +170,16 @@ export class GameService {
 			};
 
 			client.emit(updatedGame.id, gameData);
+
+			if (endGame) {
+				//Remove the game from the list of games
+				games.splice(games.indexOf(updatedGame), 1);
+				return;
+			}
 		}
 
 		//If there are no more questions, return the game with the question as the current question and empty question array
-		if (game.previousQuestions.length >= game.settings.questionCount) return changeToLeaderboard();
+		if (game.previousQuestions.length >= game.settings.questionCount) return changeToLeaderboard(true);
 
 		//Set a timeout to show the correct answer and leaderboard
 		game.status = GameStatus.QUESTION;
