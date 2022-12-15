@@ -10,6 +10,7 @@ import generateGameId from '$src/utils/generateGameId';
 import getUserInformation from '$src/utils/getUserInformation';
 import axios from '$src/utils/axios';
 import { TRIVIA_API_URL } from '$src/utils/constants';
+import { QUESTION_INTRO_TIME } from '_packages/shared/src/constants';
 import {
 	DEFAULT_QUESTION_COUNT,
 	DEFAULT_QUESTION_TIME,
@@ -96,19 +97,14 @@ export class GameService {
 	}
 
 	async changePlayerStatus(data: SocketData, user: Player): Promise<GameInformation> {
-		console.log('changePlayerStatus');
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
-		console.log(`Game is ${game ? 'found' : 'not found'}`);
 		if (!game) return null; // If the game doesn't exist, return null
 
 		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
 
-		console.log(`Player is ${player ? 'found' : 'not found'}`);
 		if (!player) return null; // If the player doesn't exist, return null
 
 		if (player.status == PlayerStatus.HOST) return null; //Check if the player the host
-
-		console.log(`Player ${user.id} changed status to ${data.status}`);
 
 		//Update the player's status
 		game.players.find((player: Player) => player.id === user.id).status = data.status;
@@ -180,7 +176,7 @@ export class GameService {
 					const timeLeft: number = updatedGame.settings.questionTime - time;
 					score = difficultyMultiplier * timeLeft;
 				}
-				player.score = Math.round(score);
+				player.score = Math.round(score * 10);
 			}
 
 			//Sort the players by score
@@ -205,7 +201,7 @@ export class GameService {
 
 		//Set a timeout to show the correct answer and leaderboard
 		game.status = GameStatus.QUESTION;
-		setTimeout(changeToLeaderboard, game.settings.questionTime * 1000);
+		setTimeout(changeToLeaderboard, game.settings.questionTime * 1000 + QUESTION_INTRO_TIME);
 
 		//Return game with the question as the current question and empty question array
 		const question: Question = game.questions[game.previousQuestions.length];
@@ -232,6 +228,8 @@ export class GameService {
 
 		if (!game.activeQuestion) return null; // If there is no active question, return null
 
+		if (game.activeQuestion.sentAt + QUESTION_INTRO_TIME > Date.now()) return null; //Check that game.activeQuestion.sentAt is after QUESTION_INTRO_TIME
+
 		if (game.activeQuestion.questionId !== data.questionId) return null; //Check that the player is answering the active question
 
 		const question: Question = game.questions.find((q: Question) => q.questionId === data.questionId); // Find the question
@@ -248,7 +246,7 @@ export class GameService {
 		game.answers[question.questionId][player.id] = {
 			answer: data.answer,
 			correct: data.answer === question.correctAnswer,
-			time: Date.now() - game.activeQuestion.sentAt
+			time: Date.now() - game.activeQuestion.sentAt - QUESTION_INTRO_TIME
 		};
 	}
 }
