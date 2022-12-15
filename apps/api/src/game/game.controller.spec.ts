@@ -15,6 +15,7 @@ import {
 	DEFAULT_QUESTION_CATEGORY,
 	AUTH0_TEST_USERNAME
 } from '$src/utils/env';
+import { PlayerStatus } from '_packages/shared-types/src/enums';
 
 describe('GameController', () => {
 	let controller: GameController;
@@ -45,15 +46,10 @@ describe('GameController', () => {
 		const createGameResult: GameInformation = await controller.createGame(`Bearer ${accessToken}`);
 		const gameId: string = createGameResult.id;
 
-		const result: GameInformation | HttpStatus = controller.joinGame(gameId);
+		const result: GameInformation | HttpStatus = await controller.joinGame(`Bearer ${accessToken}`, gameId);
 
-		//Fail the test if the game doesn't exist
-		if (result === HttpStatus.NOT_FOUND) {
-			expect(result).not.toBe(HttpStatus.NOT_FOUND);
-			return;
-		}
-
-		validateGame(result as GameInformation);
+		//Should fail since same user is joining
+		expect(result).toBe(HttpStatus.NOT_FOUND);
 	});
 });
 
@@ -78,15 +74,12 @@ function validateGame(result: GameInformation): void {
 
 	expect(result).toHaveProperty('answers'); // Check if the game has answers
 
-	//Expect the answers to be empty
-	expect(result.answers.length).toBe(0);
-
 	expect(result).toHaveProperty('players'); // Check if the game has players
 
 	//Expect the players to have one player
 	expect(result.players.length).toBe(1);
 
-	expect(result.players[0].host).toBe(true); // Check if the player is the host
+	expect(result.players[0].status == PlayerStatus.HOST).toBe(true); // Check if the player is the host
 
 	expect(result.players[0].email).toBe(AUTH0_TEST_USERNAME); // Check if the player's email is the same as the test username
 }
