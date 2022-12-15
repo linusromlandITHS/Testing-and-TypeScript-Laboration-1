@@ -123,13 +123,25 @@ export class GameService {
 			correctAnswer: q.correctAnswer
 		}));
 
-		//TODO: Generalize this to work with all question and not just the first one
-		game.status = GameStatus.QUESTION; // Set the game's status to playing
+		return await this.nextQuestion(data, user, client); // Return the game
+	}
 
+	async nextQuestion(data: SocketData, user: Player, client: Socket): Promise<GameInformation> {
+		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+
+		if (!game) return null; // If the game doesn't exist, return null
+
+		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
+
+		if (!player) return null; // If the player doesn't exist, return null
+
+		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
+
+		//Set a timeout to show the correct answer and leaderboard
+		game.status = GameStatus.QUESTION;
 		setTimeout(() => {
-			//Set a timeout to show the correct answer and leaderboard
 			game.status = GameStatus.LEADERBOARD;
-			game.previousQuestions.push(game.questions[0]);
+			game.previousQuestions.push(game.questions[game.previousQuestions.length]);
 			game.activeQuestion = null;
 
 			client.emit(game.id, {
@@ -139,11 +151,11 @@ export class GameService {
 		}, game.settings.questionTime * 1000);
 
 		//Return game with the first question as the current question and empty question array
-		const firstQuestion: Question = game.questions.shift();
+		const question: Question = game.questions[game.previousQuestions.length];
 		return {
 			...game,
 			activeQuestion: {
-				...firstQuestion,
+				...question,
 				correctAnswer: null
 			},
 			questions: []

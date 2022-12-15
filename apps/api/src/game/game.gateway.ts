@@ -15,7 +15,8 @@ export class GameGateway {
 
 	private readonly events = {
 		changeSettings: this.gameService.changeSettings,
-		startGame: this.gameService.startGame
+		startGame: this.gameService.startGame,
+		nextQuestion: this.gameService.nextQuestion
 	};
 
 	@UseGuards(AuthGuard)
