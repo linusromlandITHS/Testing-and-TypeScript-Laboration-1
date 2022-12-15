@@ -16,7 +16,8 @@ import {
 	DEFAULT_QUESTION_TIME,
 	DEFAULT_QUESTION_REGION,
 	DEFAULT_QUESTION_DIFFICULTY,
-	DEFAULT_QUESTION_CATEGORY
+	DEFAULT_QUESTION_CATEGORY,
+	MAX_POINTS
 } from '$src/utils/env';
 
 const _games: GameInformation[] = [];
@@ -176,17 +177,16 @@ export class GameService {
 					}
 					streak++;
 
-					const time: number = updatedGame.answers[key][player.id].time / 1000;
+					const time: number = updatedGame.answers[key][player.id].time / MAX_POINTS;
 					//Calculate after how many seconds the player answered the question
 					const responseTime: number = updatedGame.settings.questionTime - time;
 
-					score += Math.round((1 - responseTime / updatedGame.settings.questionTime / 2) * 1000);
+					score += Math.round((1 - responseTime / updatedGame.settings.questionTime / 2) * MAX_POINTS);
 
 					//Check if stream is higher or equal to 3
 					if (streak >= 3) {
-						console.log(Math.round(Math.log(streak) * 100));
 						//Logarithmic function to calculate the streak bonus
-						score += Math.round(Math.log(streak) * 100);
+						score += Math.round(Math.log(streak) * (MAX_POINTS / 10));
 					}
 				}
 				player.score = score;
