@@ -31,6 +31,7 @@ export class GameService {
 			id: generateGameId(games.map((game: GameInformation) => game.id)), // Generate a unique game ID
 			status: GameStatus.JOINING,
 			settings: {
+				isPrivate: true,
 				// Set the default settings
 				questionCount: DEFAULT_QUESTION_COUNT,
 				questionTime: DEFAULT_QUESTION_TIME,
@@ -64,7 +65,7 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		if (game.status != GameStatus.JOINING) return; // If the game isn't in the joining phase, return null
+		if (game.status != GameStatus.JOINING || game.settings.isPrivate) return; // If the game isn't in the joining phase or is private, return null
 
 		if (!game.players.find((player: Player) => player.id === user.id))
 			game.players.push({

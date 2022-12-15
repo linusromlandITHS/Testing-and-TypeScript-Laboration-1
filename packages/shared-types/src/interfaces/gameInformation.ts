@@ -1,6 +1,7 @@
 import { GameStatus, PlayerStatus } from '../enums';
 
 interface Settings {
+	isPrivate: boolean;
 	questionCount?: number;
 	questionTime?: number;
 	region?: string;
