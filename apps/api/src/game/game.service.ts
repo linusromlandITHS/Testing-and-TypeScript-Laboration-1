@@ -5,7 +5,7 @@ import { Socket } from 'socket.io';
 
 // Internal dependencies
 import { GameInformation, Player, Question, SocketData } from '_packages/shared-types';
-import { GameStatus, PlayerStatus, Comparator } from '_packages/shared-types/src/enums';
+import { GameStatus, PlayerStatus } from '_packages/shared-types/src/enums';
 import generateGameId from '$src/utils/generateGameId';
 import getUserInformation from '$src/utils/getUserInformation';
 import axios from '$src/utils/axios';
