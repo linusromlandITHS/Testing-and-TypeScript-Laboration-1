@@ -4,6 +4,7 @@ type SocketData = {
 	gamePin: string;
 	event: 'changeSettings' | 'startGame' | 'nextQuestion' | 'answerQuestion';
 	settings?: Settings;
+	questionId?: string;
 	answer?: string;
 };
 

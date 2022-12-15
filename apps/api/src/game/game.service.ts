@@ -17,6 +17,7 @@ import {
 	DEFAULT_QUESTION_DIFFICULTY,
 	DEFAULT_QUESTION_CATEGORY
 } from '$src/utils/env';
+import { stringify } from 'querystring';
 
 const games: GameInformation[] = [];
 
@@ -40,7 +41,7 @@ export class GameService {
 			},
 			questions: [],
 			previousQuestions: [],
-			answers: [],
+			answers: {},
 			players: [
 				// Add the host to the player list
 				{
@@ -94,7 +95,7 @@ export class GameService {
 		return game; // Return the game
 	}
 
-	async startGame(data: SocketData, user: Player, client: Socket): Promise<GameInformation> {
+	async startGame(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
 		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -126,8 +127,8 @@ export class GameService {
 		return await this.nextQuestion(data, user, client); // Return the game
 	}
 
-	async nextQuestion(data: SocketData, user: Player, client: Socket): Promise<GameInformation> {
-		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+	async nextQuestion(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
+		const game: GameInformation = games.find((g: GameInformation) => g.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
 
@@ -137,28 +138,71 @@ export class GameService {
 
 		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
 
+		function changeToLeaderboard(): void {
+			const updatedGame: GameInformation = games.find((g: GameInformation) => g.id === data.gamePin);
+			updatedGame.status = GameStatus.LEADERBOARD;
+			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
+			updatedGame.activeQuestion = null;
+
+			console.log(updatedGame);
+
+			const gameData: any = {
+				...updatedGame,
+				questions: []
+			};
+
+			client.emit(updatedGame.id, gameData);
+		}
+
+		//If there are no more questions, return the game with the question as the current question and empty question array
+		if (game.previousQuestions.length >= game.settings.questionCount) return changeToLeaderboard();
+
 		//Set a timeout to show the correct answer and leaderboard
 		game.status = GameStatus.QUESTION;
-		setTimeout(() => {
-			game.status = GameStatus.LEADERBOARD;
-			game.previousQuestions.push(game.questions[game.previousQuestions.length]);
-			game.activeQuestion = null;
+		setTimeout(changeToLeaderboard, game.settings.questionTime * 1000);
 
-			client.emit(game.id, {
-				...game,
-				questions: []
-			});
-		}, game.settings.questionTime * 1000);
-
-		//Return game with the first question as the current question and empty question array
+		//Return game with the question as the current question and empty question array
 		const question: Question = game.questions[game.previousQuestions.length];
+		game.activeQuestion = {
+			...question,
+			correctAnswer: null,
+			sentAt: Date.now()
+		};
+
 		return {
 			...game,
-			activeQuestion: {
-				...question,
-				correctAnswer: null
-			},
 			questions: []
+		};
+	}
+
+	async answerQuestion(data: SocketData, user: Player): Promise<void> {
+		const game: GameInformation = games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+
+		if (!game) return null; // If the game doesn't exist, return null
+
+		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
+
+		if (!player) return null; // If the player doesn't exist, return null
+
+		if (!game.activeQuestion) return null; // If there is no active question, return null
+
+		if (game.activeQuestion.questionId !== data.questionId) return null; //Check that the player is answering the active question
+
+		const question: Question = game.questions.find((q: Question) => q.questionId === data.questionId); // Find the question
+
+		if (!question) return null; // If the question doesn't exist, return null
+
+		if (game.answers[question.questionId] && game.answers[question.questionId][player.id]) return null; //If the player has already answered the question, return null
+
+		//Create the question object if it doesn't exist
+		if (!game.answers[question.questionId]) {
+			game.answers[question.questionId] = {};
+		}
+
+		game.answers[question.questionId][player.id] = {
+			answer: data.answer,
+			correct: data.answer === question.correctAnswer,
+			time: Date.now() - game.activeQuestion.sentAt
 		};
 	}
 }

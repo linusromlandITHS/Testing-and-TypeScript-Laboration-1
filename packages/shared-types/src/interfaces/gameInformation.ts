@@ -14,17 +14,21 @@ interface Question {
 	question: string;
 	answers: string[];
 	correctAnswer?: string;
+	sentAt?: number;
 }
 
 interface PlayerAnswer {
-	playerId: string;
 	answer: string;
 	correct: boolean;
+	time: number;
+}
+
+interface PlayerId {
+	[key: string]: PlayerAnswer;
 }
 
 interface Answer {
-	questionId: string;
-	playerAnswers: PlayerAnswer[];
+	[key: string]: PlayerId;
 }
 
 interface Player {
@@ -43,7 +47,7 @@ interface GameInformation {
 	questions: Question[];
 	previousQuestions: Question[];
 	activeQuestion?: Question;
-	answers: Answer[];
+	answers: Answer;
 	players: Player[];
 }
 

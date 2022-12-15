@@ -16,8 +16,8 @@ export class OptionsService {
 		for (const key in categoriesResponse.data) {
 			if (categoriesResponse.data.hasOwnProperty(key)) {
 				categories.push({
-					label: categoriesResponse.data[key][0],
-					value: key
+					value: categoriesResponse.data[key][0],
+					label: key
 				});
 			}
 		}
