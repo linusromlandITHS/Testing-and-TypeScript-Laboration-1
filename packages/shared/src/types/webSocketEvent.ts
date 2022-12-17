@@ -1,7 +1,7 @@
 import { PlayerStatus } from '../enums';
 import { Settings } from './gameInformation';
 
-type SocketData = {
+type WebSocketEvent = {
 	gamePin: string;
 	event: 'changeSettings' | 'startGame' | 'nextQuestion' | 'answerQuestion' | 'changePlayerStatus';
 	settings?: Settings;
@@ -10,4 +10,4 @@ type SocketData = {
 	status?: PlayerStatus;
 };
 
-export default SocketData;
+export default WebSocketEvent;

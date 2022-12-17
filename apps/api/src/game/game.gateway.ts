@@ -5,9 +5,10 @@ import { Socket } from 'socket.io';
 
 // Internal Dependencies
 import { AuthGuard } from '$src/guards/auth.guard';
-import { GameInformation, Player, SocketData } from '_packages/shared/src/types';
+import { GameInformation, Player, WebSocketEvent } from '_packages/shared/src/types';
 import { GameService } from './game.service';
 import getUserInformation from '$src/utils/getUserInformation';
+import validateWebSocketEvent from '$src/utils/validateWebSocketEvent';
 
 @WebSocketGateway()
 export class GameGateway {
@@ -23,18 +24,19 @@ export class GameGateway {
 
 	@UseGuards(AuthGuard)
 	@SubscribeMessage('events')
-	async handleMessage(client: Socket, data: SocketData): Promise<GameInformation | void> {
+	async handleMessage(client: Socket, data: WebSocketEvent): Promise<GameInformation | void> {
 		try {
 			//If empty data, return
 			if (!data) return console.log('Empty payload');
+
+			//Validate data
+			if (!validateWebSocketEvent(data)) return console.log('Invalid payload');
 
 			//Read WS Headers
 			const token: string = client.handshake.headers['authorization']?.split(' ')[1];
 
 			//Get user information
 			const userInformation: Player = await getUserInformation(token);
-
-			if (!data.gamePin) return console.log('No game pin provided');
 
 			if (data.event in this.events) {
 				const gameInformation: GameInformation | void = await this.events[data.event](data, userInformation, client);

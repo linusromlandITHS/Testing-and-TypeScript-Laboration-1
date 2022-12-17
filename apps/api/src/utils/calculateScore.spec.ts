@@ -69,22 +69,19 @@ describe('calculateScore', () => {
 	});
 
 	it('should fail if the responseTime is a boolean', () => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error - This is a test
 		const score: number = calculateScore(true, 1000, 0);
 		expect(score).toBe(undefined);
 	});
 
 	it('should fail if the questionTime is a boolean', () => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error - This is a test
 		const score: number = calculateScore(0, false, 0);
 		expect(score).toBe(undefined);
 	});
 
 	it('should fail if the streak is a boolean', () => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error - This is a test
 		const score: number = calculateScore(0, 1000, true);
 		expect(score).toBe(undefined);
 	});

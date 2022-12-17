@@ -1,7 +1,7 @@
 import { Settings, Question, PlayerAnswer, Answer, Player, GameInformation } from './gameInformation';
 import HealthResult from './healthResult';
 import { Options, OptionItem } from './options';
-import SocketData from './socketData';
+import WebSocketEvent from './webSocketEvent';
 
 export type {
 	Settings,
@@ -13,5 +13,5 @@ export type {
 	HealthResult,
 	Options,
 	OptionItem,
-	SocketData
+	WebSocketEvent
 };

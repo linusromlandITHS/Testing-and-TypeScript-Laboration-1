@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { Socket } from 'socket.io';
 
 // Internal dependencies
-import { GameInformation, Player, Question, SocketData } from '_packages/shared/src/types';
+import { GameInformation, Player, Question, WebSocketEvent } from '_packages/shared/src/types';
 import { GameStatus, PlayerStatus } from '_packages/shared/src/enums';
 import generateGameId from '$src/utils/generateGameId';
 import getUserInformation from '$src/utils/getUserInformation';
@@ -79,7 +79,7 @@ export class GameService {
 		return game; // Return the game
 	}
 
-	async changeSettings(data: SocketData, user: Player): Promise<GameInformation> {
+	async changeSettings(data: WebSocketEvent, user: Player): Promise<GameInformation> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -100,7 +100,7 @@ export class GameService {
 		return game; // Return the game
 	}
 
-	async changePlayerStatus(data: SocketData, user: Player): Promise<GameInformation> {
+	async changePlayerStatus(data: WebSocketEvent, user: Player): Promise<GameInformation> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -119,7 +119,7 @@ export class GameService {
 		return game; // Return the game
 	}
 
-	async startGame(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
+	async startGame(data: WebSocketEvent, user: Player, client: Socket): Promise<GameInformation | void> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -153,7 +153,7 @@ export class GameService {
 		return await this.nextQuestion(data, user, client); // Return the game
 	}
 
-	async nextQuestion(data: SocketData, user: Player, client: Socket): Promise<GameInformation | void> {
+	async nextQuestion(data: WebSocketEvent, user: Player, client: Socket): Promise<GameInformation | void> {
 		const game: GameInformation = _games.find((g: GameInformation) => g.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -230,7 +230,7 @@ export class GameService {
 		};
 	}
 
-	async answerQuestion(data: SocketData, user: Player): Promise<void> {
+	async answerQuestion(data: WebSocketEvent, user: Player): Promise<void> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
