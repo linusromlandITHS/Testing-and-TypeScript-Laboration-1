@@ -17,4 +17,9 @@ describe('getUserInformation', () => {
 			/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
 		);
 	});
+
+	it('should throw an error if the access token is invalid', async () => {
+		const accessToken: string = 'invalid';
+		await expect(getUserInformation(accessToken)).rejects.toThrow();
+	});
 });

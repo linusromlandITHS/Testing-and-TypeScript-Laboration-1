@@ -10,6 +10,8 @@ export default async function getUserInformation(token: string): Promise<Player>
 		}
 	});
 
+	if (!data) return;
+
 	return {
 		id: data.sub,
 		name: data.nickname,
