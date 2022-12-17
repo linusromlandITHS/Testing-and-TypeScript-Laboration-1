@@ -24,7 +24,7 @@ export class GameController {
 
 		const game: GameInformation = await this.gameService.joinGame(token, gameId);
 
-		if (!game) return HttpStatus.NOT_FOUND; // If the game doesn't exist, return null
+		if (!game || typeof game !== 'object') return HttpStatus.NOT_FOUND; // If the game doesn't exist, return null
 
 		return game; // Return the game
 	}

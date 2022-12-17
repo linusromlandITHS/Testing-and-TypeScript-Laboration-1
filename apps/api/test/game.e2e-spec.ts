@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import validateGame from './helpers/validateGame.helper';
 
 describe('Game check', () => {
-	it('/game (POST)', () => {
+	it('/game (POST) - Valid Token', () => {
 		return request(global.SERVER)
 			.post('/game')
 			.set('Authorization', `Bearer ${global.ACCESS_TOKEN}`)
@@ -14,16 +14,16 @@ describe('Game check', () => {
 			});
 	});
 
-	it('/game (POST) - no token', () => {
+	it('/game (POST) - Invalid token', () => {
 		return request(global.SERVER)
 			.post('/game')
-			.expect(403)
+			.set('Authorization', 'Bearer invalid_token')
+			.expect(401)
 			.expect('Content-Type', /json/)
 			.then((res: request.Response) => {
 				expect(res.body).toEqual({
-					statusCode: 403,
-					message: 'Forbidden resource',
-					error: 'Forbidden'
+					statusCode: 401,
+					message: 'Unauthorized'
 				});
 			});
 	});

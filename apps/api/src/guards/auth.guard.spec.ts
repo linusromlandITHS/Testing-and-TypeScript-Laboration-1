@@ -1,5 +1,5 @@
 // External dependencies
-import { ExecutionContext } from '@nestjs/common';
+import { ExecutionContext, HttpException } from '@nestjs/common';
 import { createMock } from '@golevelup/ts-jest';
 
 // Internal dependencies
@@ -20,8 +20,7 @@ describe('AuthGuard', () => {
 	});
 
 	it('should return false when not passing token', async () => {
-		const result: boolean = await authGuard.canActivate(mockContext);
-		expect(result).toEqual(false);
+		await expect(authGuard.canActivate(mockContext)).rejects.toThrow(HttpException);
 	});
 
 	it('should return false when passing invalid token', async () => {
@@ -30,9 +29,7 @@ describe('AuthGuard', () => {
 				authorization: 'Bearer invalidToken'
 			}
 		});
-
-		const result: boolean = await authGuard.canActivate(mockContext);
-		expect(result).toEqual(false);
+		await expect(authGuard.canActivate(mockContext)).rejects.toThrow(HttpException);
 	});
 
 	it('should return true since token is valid', async () => {

@@ -1,5 +1,5 @@
 // External dependencies
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, HttpException } from '@nestjs/common';
 import { decode, Jwt, JwtPayload, verify } from 'jsonwebtoken';
 import { JwksClient, SigningKey } from 'jwks-rsa';
 import { Socket } from 'socket.io';
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
 
 				token = request.headers['authorization']?.split(' ')[1];
 			}
-			if (!token) return false;
+			if (!token) throw Error();
 
 			//Validate auth0 jwt token
 			const client: JwksClient = new JwksClient({
@@ -31,17 +31,17 @@ export class AuthGuard implements CanActivate {
 
 			const decoded: Jwt = decode(token, { complete: true });
 
-			if (!decoded) return false;
+			if (!decoded) throw Error();
 
 			const key: SigningKey = await client.getSigningKey(decoded.header.kid);
 			const verifiedToken: string | JwtPayload = verify(token, key.getPublicKey(), {
 				algorithms: ['RS256']
 			});
 
-			if (!verifiedToken) return false;
+			if (!verifiedToken) throw Error();
 			return true;
 		} catch (error) {
-			return false;
+			throw new HttpException('Unauthorized', 401);
 		}
 	}
 }
