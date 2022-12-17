@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import checkOptions from './helpers/checkOptions.helper';
+import validateOptions from './helpers/validateOptions.helper';
 
 describe('Options', () => {
 	it('/ (GET)', () => {
@@ -12,7 +12,7 @@ describe('Options', () => {
 				const fields: string[] = ['categories', 'tags', 'regions', 'difficulties'];
 
 				for (const field of fields) {
-					checkOptions(res.body, field);
+					validateOptions(res.body, field);
 				}
 			});
 	});

@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OptionsController } from './options.controller';
 import { OptionsService } from './options.service';
 import { Options } from '_packages/shared/src/types';
-import checkOptions from '$src/../test/helpers/checkOptions.helper';
+import validateOptions from '$src/../test/helpers/validateOptions.helper';
 
 describe('OptionsController', () => {
 	let controller: OptionsController;
@@ -28,7 +28,7 @@ describe('OptionsController', () => {
 		const fields: string[] = ['categories', 'tags', 'regions', 'difficulties'];
 
 		for (const field of fields) {
-			checkOptions(options, field);
+			validateOptions(options, field);
 		}
 	});
 });
