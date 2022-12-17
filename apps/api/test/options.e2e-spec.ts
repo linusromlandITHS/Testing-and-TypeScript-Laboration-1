@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import validateOptions from './helpers/validateOptions.helper';
 
-describe('Options', () => {
+describe('OptionsController (e2e)', () => {
 	it('/ (GET)', () => {
 		return request(global.SERVER)
 			.get('/options')

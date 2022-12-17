@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 
-describe('Health check', () => {
+describe('HealthController (e2e)', () => {
 	it('/ (GET)', () => {
 		return request(global.SERVER)
 			.get('/health')

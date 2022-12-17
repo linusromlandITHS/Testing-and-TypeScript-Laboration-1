@@ -35,6 +35,8 @@ export class GameGateway {
 			//Get user information
 			const userInformation: Player = await getUserInformation(token);
 
+			console.log(`User ${userInformation.name} requested ${data.event} for game ${data.gamePin}`);
+
 			if (data.event in this.events) {
 				const gameInformation: GameInformation | void = await this.events[data.event](data, userInformation, client);
 
