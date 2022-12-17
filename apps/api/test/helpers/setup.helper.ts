@@ -1,7 +1,3 @@
-// Load environment variables
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 // External dependencies
 import 'tsconfig-paths/register';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -9,8 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 // Internal dependencies
 import { AppModule } from '$src/app.module';
 import getAccessToken from './getAccessToken.helper';
-
-const JEST_TEST_PORT: number = Number(process.env.JEST_TEST_PORT) || 30001;
+import { JEST_TEST_PORT } from '$src/utils/env';
 
 const setupTest = async (): Promise<void> => {
 	const moduleFixture: TestingModule = await Test.createTestingModule({

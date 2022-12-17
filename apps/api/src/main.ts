@@ -1,7 +1,3 @@
-// Load environment variables
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 // External dependencies
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';

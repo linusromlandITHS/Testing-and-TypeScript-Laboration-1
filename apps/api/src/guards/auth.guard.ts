@@ -4,12 +4,13 @@ import { decode, Jwt, JwtPayload, verify } from 'jsonwebtoken';
 import { JwksClient, SigningKey } from 'jwks-rsa';
 import { Socket } from 'socket.io';
 
+// Internal dependencies
+import { AUTH0_DOMAIN } from '$src/utils/env';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		try {
-			const { AUTH0_DOMAIN } = process.env;
-
 			let token: string;
 
 			//Check if request is http or ws

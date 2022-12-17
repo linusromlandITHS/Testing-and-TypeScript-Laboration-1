@@ -3,9 +3,16 @@ import { HttpService } from '@nestjs/axios';
 import { Observable, map, lastValueFrom } from 'rxjs';
 import { AxiosResponse } from '@nestjs/terminus/dist/health-indicator/http/axios.interfaces';
 
-export default async function getAccessToken(): Promise<string> {
-	const { AUTH0_DOMAIN, AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET, AUTH0_TEST_USERNAME, AUTH0_TEST_PASSWORD } = process.env;
+// Internal dependencies
+import {
+	AUTH0_DOMAIN,
+	AUTH0_CLIENT_ID,
+	AUTH0_CLIENT_SECRET,
+	AUTH0_TEST_USERNAME,
+	AUTH0_TEST_PASSWORD
+} from '$src/utils/env';
 
+export default async function getAccessToken(): Promise<string> {
 	const httpService: HttpService = new HttpService();
 
 	type Auth0M2MObject = {
