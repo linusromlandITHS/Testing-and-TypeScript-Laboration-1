@@ -3,7 +3,7 @@ import { Settings } from './gameInformation';
 
 type SocketData = {
 	gamePin: string;
-	event: 'changeSettings' | 'startGame' | 'nextQuestion' | 'answerQuestion';
+	event: 'changeSettings' | 'startGame' | 'nextQuestion' | 'answerQuestion' | 'changePlayerStatus';
 	settings?: Settings;
 	questionId?: string;
 	answer?: string;

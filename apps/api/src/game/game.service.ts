@@ -83,6 +83,8 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
+		if (game.status !== GameStatus.JOINING) return null; // If the game isn't in the joining phase, return null
+
 		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
 
 		if (!player) return null; // If the player doesn't exist, return null
@@ -99,7 +101,10 @@ export class GameService {
 
 	async changePlayerStatus(data: SocketData, user: Player): Promise<GameInformation> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
+
 		if (!game) return null; // If the game doesn't exist, return null
+
+		if (game.status !== GameStatus.JOINING) return null; // If the game isn't in the joining phase, return null
 
 		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
 

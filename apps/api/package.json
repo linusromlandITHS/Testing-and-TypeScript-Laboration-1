@@ -14,8 +14,9 @@
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
 		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-		"test": "jest --setupFiles dotenv/config",
-		"test:e2e": "jest --setupFiles dotenv/config --config ./test/jest-e2e.json --runInBand"
+		"test": "jest --setupFiles dotenv/config --forceExit",
+		"test:e2e": "jest --setupFiles dotenv/config --config ./test/jest-e2e.json --runInBand",
+		"test:cov": "jest --setupFiles dotenv/config --coverage --runInBand"
 	},
 	"dependencies": {
 		"@golevelup/ts-jest": "^0.3.4",

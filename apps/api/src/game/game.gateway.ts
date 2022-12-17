@@ -23,7 +23,7 @@ export class GameGateway {
 
 	@UseGuards(AuthGuard)
 	@SubscribeMessage('events')
-	async handleMessage(client: Socket, data: SocketData): Promise<void> {
+	async handleMessage(client: Socket, data: SocketData): Promise<GameInformation | void> {
 		try {
 			//If empty data, return
 			if (!data) return console.log('Empty payload');
@@ -43,6 +43,8 @@ export class GameGateway {
 
 				//Emit to all clients
 				client.emit(data.gamePin, gameInformation);
+
+				return gameInformation;
 			}
 		} catch (error) {
 			console.log('Error occured in src/game/game.gateway.ts:handleMessage()');
