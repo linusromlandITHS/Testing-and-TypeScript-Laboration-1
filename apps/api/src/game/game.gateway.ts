@@ -1,10 +1,8 @@
 // External Dependencies
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
-import { UseGuards } from '@nestjs/common';
 import { Socket } from 'socket.io';
 
 // Internal Dependencies
-import { AuthGuard } from '$src/guards/auth.guard';
 import { GameInformation, Player, WebSocketEvent } from '_packages/shared/src/types';
 import { GameService } from './game.service';
 import getUserInformation from '$src/utils/getUserInformation';
@@ -22,7 +20,6 @@ export class GameGateway {
 		answerQuestion: this.gameService.answerQuestion
 	};
 
-	@UseGuards(AuthGuard)
 	@SubscribeMessage('events')
 	async handleMessage(client: Socket, data: WebSocketEvent): Promise<GameInformation | void> {
 		try {

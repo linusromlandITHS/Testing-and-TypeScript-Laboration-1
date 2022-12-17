@@ -5,6 +5,7 @@ describe('Options', () => {
 	it('/ (GET)', () => {
 		return request(global.SERVER)
 			.get('/options')
+			.set('Authorization', `Bearer ${global.ACCESS_TOKEN}`)
 			.expect(200)
 			.then((res: request.Response) => {
 				expect(res.body).toBeDefined();
