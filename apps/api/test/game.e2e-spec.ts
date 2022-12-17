@@ -13,4 +13,18 @@ describe('Game check', () => {
 				validateGame(res.body);
 			});
 	});
+
+	it('/game (POST) - no token', () => {
+		return request(global.SERVER)
+			.post('/game')
+			.expect(403)
+			.expect('Content-Type', /json/)
+			.then((res: request.Response) => {
+				expect(res.body).toEqual({
+					statusCode: 403,
+					message: 'Forbidden resource',
+					error: 'Forbidden'
+				});
+			});
+	});
 });
