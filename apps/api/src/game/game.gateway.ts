@@ -13,6 +13,8 @@ export class GameGateway {
 	constructor(private readonly gameService: GameService) {}
 
 	private readonly events = {
+		joinGame: async (data: WebSocketEvent, userInformation: Player): Promise<GameInformation> =>
+			await this.gameService.joinGame('', data.gamePin, userInformation),
 		changeSettings: this.gameService.changeSettings,
 		changePlayerStatus: this.gameService.changePlayerStatus,
 		startGame: this.gameService.startGame,

@@ -59,8 +59,8 @@ export class GameService {
 		return game; // Return the game
 	}
 
-	async joinGame(token: string, gameId: string): Promise<GameInformation> {
-		const user: Player = await getUserInformation(token); // Get the user's information from the auth server
+	async joinGame(token: string, gameId: string, user?: Player): Promise<GameInformation> {
+		if (!user) user = await getUserInformation(token); // Get the user's information from the auth server
 
 		if (!user) return null; // If the user doesn't exist, return null
 
@@ -68,9 +68,9 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		if (game.status != GameStatus.JOINING || game.settings.isPrivate) return; // If the game isn't in the joining phase or is private, return null
+		if (game.status != GameStatus.JOINING) return; // If the game isn't in the joining phase, return null
 
-		if (!game.players.find((player: Player) => player.id === user.id))
+		if (!game.players.find((player: Player) => player.id === user.id) && !game.settings.isPrivate)
 			game.players.push({
 				...user,
 				status: PlayerStatus.NOT_READY

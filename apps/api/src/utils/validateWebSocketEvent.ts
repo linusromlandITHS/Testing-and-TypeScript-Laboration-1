@@ -14,7 +14,14 @@ export default function validateWebSocketEvent(event: WebSocketEvent): boolean {
 
 	if (!event.event) return false;
 
-	const validEvents: string[] = ['changeSettings', 'startGame', 'nextQuestion', 'answerQuestion', 'changePlayerStatus'];
+	const validEvents: string[] = [
+		'changeSettings',
+		'startGame',
+		'nextQuestion',
+		'answerQuestion',
+		'changePlayerStatus',
+		'joinGame'
+	];
 
 	if (!validEvents.includes(event.event)) return false;
 
