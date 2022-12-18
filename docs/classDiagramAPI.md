@@ -42,17 +42,18 @@ classDiagram
     }
     class GameGateway{
         -constructor(GameService gameService)
-        +handleMatchEvent(MatchEvent data)
+        -function[] events
+        +handleMessage(Socket client, WebSocketEvent data) Promise~GameInformation | void~
     }
     class GameService{
-        -GameInformation[] games
-        +createGame() Promise~GameInformation~
-        +getGame() Promise~GameInformation~
-        +answerQuestion() Promise~void~
-        +getLeaderboard() Promise~Player[]~
-        +getQuestion(string questionId) Promise~Question~
-        +nextQuestion() Promise~Question~
-        +startGame() Promise~void~
+        -GameInformation[] _games
+        +createGame(string token) Promise~GameInformation~
+        +createGame(string token, string gameId, Player user?) Promise~GameInformation~
+        +changeSettings(WebSocketEvent data, Player user) Promise~GameInformation~
+        +changePlayerStatus(WebSocketEvent data, Player user) Promise~GameInformation~
+        +answerQuestion(WebSocketEvent data, Player user) Promise~void~
+        +nextQuestion(WebSocketEvent data, Player user, Socket client) Promise~GameInformation | void~
+        +startGame(WebSocketEvent data, Player user, Socket client) Promise~GameInformation | void~
 
     }
 
