@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { IdToken, useAuth0 } from '@auth0/auth0-react';
 
 // Routes imports
+import Home from './Landing/Landing';
 import Lobby from './Lobby/Lobby';
 
 export default function routes(): JSX.Element {
@@ -33,11 +34,11 @@ export default function routes(): JSX.Element {
 		})();
 	}, [token]);
 
-	if (!token.length) return <p>Not logged in...</p>;
+	if (!token.length) return <></>;
 
 	return (
 		<Routes>
-			<Route path="/" element={<h1 className="text-4xl">Home</h1>} />
+			<Route path="/" element={<Home />} />
 			<Route path="/lobby" element={<Lobby />} />
 		</Routes>
 	);

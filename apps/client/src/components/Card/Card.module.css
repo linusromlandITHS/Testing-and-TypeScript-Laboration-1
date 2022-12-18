@@ -1,0 +1,22 @@
+.container {
+	display: flex;
+	margin: 1rem;
+	max-width: 40rem;
+}
+
+.icon {
+	margin: 0 0.5rem;
+}
+
+.title {
+	color: var(--primary-color);
+	font-weight: bold;
+	font-size: 22px;
+}
+
+.subtitle {
+	color: var(--secondary-color);
+	font-weight: semibold;
+	word-wrap: break-word;
+	font-size: 14px;
+}
