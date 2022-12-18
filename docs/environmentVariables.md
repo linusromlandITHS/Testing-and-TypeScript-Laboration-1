@@ -7,9 +7,9 @@ All variables that are not required are optional and will use the default value 
 
 | Variable                     | Description                                        | Default | Datatype                                                                        | Required                  |
 | ---------------------------- | -------------------------------------------------- | ------- | ------------------------------------------------------------------------------- | ------------------------- |
-| PORT                         | The port the server will run on                    | 3000    | Number                                                                          | No                        |
-| AUTH0_DOMAIN                 | The domain of your Auth0 application               | -       | String                                                                          | Yes                       |
-| AUTH0_CLIENT_ID              | The client id of your Auth0 application            | -       | String                                                                          | Yes                       |
+| API_PORT                     | The port the api will run on                       | 3000    | Number                                                                          | No                        |
+| PUB_AUTH0_DOMAIN             | The domain of your Auth0 application               | -       | String                                                                          | Yes                       |
+| PUB_AUTH0_CLIENT_ID          | The client id of your Auth0 application            | -       | String                                                                          | Yes                       |
 | AUTH0_CLIENT_SECRET          | The client secret of your Auth0 application        | -       | String                                                                          | Yes                       |
 | AUTH0_TEST_USERNAME          | The username of the test user                      | -       | String                                                                          | No (Yes if running tests) |
 | AUTH0_TEST_PASSWORD          | The password of the test user                      | -       | String                                                                          | No (Yes if running tests) |

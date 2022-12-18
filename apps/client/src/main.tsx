@@ -1,10 +1,25 @@
+// External dependencies
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import { Auth0Provider } from '@auth0/auth0-react';
+
+// Internal dependencies
 import './index.css';
+import Routes from './routes';
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from './utils/env';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<App />
+		<Auth0Provider
+			domain={AUTH0_DOMAIN}
+			clientId={AUTH0_CLIENT_ID}
+			redirectUri={window.location.origin}
+			cacheLocation="localstorage"
+		>
+			<BrowserRouter>
+				<Routes />
+			</BrowserRouter>
+		</Auth0Provider>
 	</React.StrictMode>
 );
