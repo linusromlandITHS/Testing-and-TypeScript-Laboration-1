@@ -4,7 +4,7 @@ dotenv.config({
 	path: '../../.env'
 });
 
-const PORT: number = Number(process.env.API_PORT) || 3000;
+const PORT: number = Number(process.env.API_PORT) || 3001;
 const AUTH0_DOMAIN: string = process.env.PUB_AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID: string = process.env.PUB_AUTH0_CLIENT_ID;
 const AUTH0_CLIENT_SECRET: string = process.env.AUTH0_CLIENT_SECRET;

@@ -7,7 +7,8 @@ All variables that are not required are optional and will use the default value 
 
 | Variable                     | Description                                        | Default | Datatype                                                                        | Required                  |
 | ---------------------------- | -------------------------------------------------- | ------- | ------------------------------------------------------------------------------- | ------------------------- |
-| API_PORT                     | The port the api will run on                       | 3000    | Number                                                                          | No                        |
+| API_PORT                     | The port the api will run on                       | 3001    | Number                                                                          | No                        |
+| CLIENT_PORT                  | The port the client will run on                    | 3000    | Number                                                                          | No                        |
 | PUB_AUTH0_DOMAIN             | The domain of your Auth0 application               | -       | String                                                                          | Yes                       |
 | PUB_AUTH0_CLIENT_ID          | The client id of your Auth0 application            | -       | String                                                                          | Yes                       |
 | AUTH0_CLIENT_SECRET          | The client secret of your Auth0 application        | -       | String                                                                          | Yes                       |
