@@ -5,10 +5,14 @@
 	border: 0.5rem solid var(--primary-color);
 	padding: 0.5rem 1rem;
 	margin: 1rem;
+	min-width: 10rem;
 	font-size: 16px;
 	font-weight: 600;
 	cursor: pointer;
 	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .secondary {
@@ -29,6 +33,31 @@
 .text {
 	font-size: 1rem;
 	font-weight: bold;
+}
+
+.spinner {
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	border: 0.2rem solid var(--primary-color);
+	border-radius: 50%;
+	border-top-color: transparent;
+	animation: spin 0.6s linear infinite;
+}
+
+.secondary .spinner,
+.primary:hover .spinner {
+	border-color: var(--primary-color) var(--primary-color) var(--primary-color) transparent;
+}
+
+.secondary:hover .spinner {
+	border-color: var(--background-color) var(--background-color) var(--background-color) transparent;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 @media (max-width: 768px) {

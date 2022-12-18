@@ -39,10 +39,6 @@
 }
 
 @media (max-width: 768px) {
-	.container {
-		margin-top: 3rem;
-	}
-
 	.title {
 		font-size: 3rem;
 	}
@@ -51,11 +47,8 @@
 		font-size: 1rem;
 	}
 
-	.buttons {
-		flex-direction: column;
-	}
-
 	.cards {
 		flex-direction: column;
+		max-width: 100%;
 	}
 }

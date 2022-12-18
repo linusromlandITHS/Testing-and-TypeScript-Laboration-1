@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IdToken, useAuth0 } from '@auth0/auth0-react';
 
+// Internal dependencies
+import api from '$src/api';
+
 // Routes imports
 import Home from './Landing/Landing';
 import Lobby from './Lobby/Lobby';
@@ -18,6 +21,7 @@ export default function routes(): JSX.Element {
 
 			if (idToken) {
 				setToken(idToken);
+				api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
 			} else {
 				setToken('');
 			}
