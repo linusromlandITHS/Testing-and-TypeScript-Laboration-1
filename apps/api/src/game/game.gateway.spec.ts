@@ -74,6 +74,15 @@ describe('GameGateway', () => {
 		expect(game.status == GameStatus.JOINING).toBe(true);
 	});
 
+	it('should be able to join game', async () => {
+		const game: GameInformation | void = await gateway.handleMessage(socket, {
+			gamePin: gameId,
+			event: 'joinGame'
+		});
+
+		expect(game).toBeDefined();
+	});
+
 	it('host should be able to start game', async () => {
 		const game: GameInformation | void = await gateway.handleMessage(socket, {
 			gamePin: gameId,
