@@ -14,7 +14,7 @@ export default function routes(): JSX.Element {
 	const { getIdTokenClaims, loginWithPopup } = useAuth0();
 	const [token, setToken] = useState('');
 
-	const checkAuth = async (): Promise<void> => {
+	const checkAuth: () => Promise<void> = async (): Promise<void> => {
 		try {
 			const idTokenClaims: IdToken | undefined = await getIdTokenClaims();
 			const idToken: string | undefined = idTokenClaims?.__raw;
