@@ -42,6 +42,9 @@ If you want to run the project without docker you need to have the following ins
 
 - [Node.js](https://nodejs.org/en/download/)
 
+You need to setup `Auth0` for the project before running it, a complete guide can be found [here](docs/auth0.md).
+You also need to setup the `Environment Variables` for the project before running it, a complete guide can be found [here](docs/environmentVariables.md).
+
 ### Manually 🛠️
 
 1. Clone the repo

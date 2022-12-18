@@ -4,6 +4,7 @@ dotenv.config({
 	path: '../../.env'
 });
 
+const PORT: number = Number(process.env.PORT) || 3000;
 const AUTH0_DOMAIN: string = process.env.AUTH0_DOMAIN;
 const AUTH0_CLIENT_ID: string = process.env.AUTH0_CLIENT_ID;
 const AUTH0_CLIENT_SECRET: string = process.env.AUTH0_CLIENT_SECRET;
@@ -18,6 +19,7 @@ const QUESTION_MAX_POSSIBLE_POINTS: number = Number(process.env.QUESTION_MAX_POS
 const JEST_TEST_PORT: number = Number(process.env.JEST_TEST_PORT) || 30001;
 
 export {
+	PORT,
 	AUTH0_DOMAIN,
 	AUTH0_CLIENT_ID,
 	AUTH0_CLIENT_SECRET,

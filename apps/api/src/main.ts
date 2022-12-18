@@ -4,9 +4,10 @@ import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify
 
 // Internal dependencies
 import { AppModule } from './app.module';
+import { PORT } from '$src/utils/env';
 
 async function bootstrap(): Promise<void> {
 	const app: NestFastifyApplication = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
-	await app.listen(3000);
+	await app.listen(PORT);
 }
 bootstrap();
