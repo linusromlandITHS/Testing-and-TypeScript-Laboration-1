@@ -12,6 +12,7 @@
    1. [Figma](#figma)
    2. [UML Sequence Diagram](#uml-sequence-diagram)
    3. [UML Class Diagram API](#uml-class-diagram-api)
+   4. [UML Class Diagram Client](#uml-class-diagram-client)
 5. [License](#)
 
 ## Introduction
@@ -107,6 +108,10 @@ The UML Sequence Diagram can be found [here](docs/sequenceDiagram.md).
 ### UML Class Diagram API
 
 The UML Class Diagram API can be found [here](docs/classDiagramAPI.md).
+
+### UML Class Diagram Client
+
+The UML Class Diagram Client can be found [here](docs/classDiagramClient.md).
 
 ## License ⚠️
 
