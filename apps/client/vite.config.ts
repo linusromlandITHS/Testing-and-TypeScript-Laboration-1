@@ -20,5 +20,11 @@ export default defineConfig({
 		outDir: './dist'
 	},
 	envDir: envPath,
-	envPrefix: 'PUB_'
+	envPrefix: 'PUB_',
+	resolve: {
+		alias: {
+			$src: `${__dirname}/src`,
+			_packages: `${__dirname}/../../packages`
+		}
+	}
 });

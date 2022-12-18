@@ -5,9 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 // Internal dependencies
-import './index.css';
+import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from '$src/utils/env';
 import Routes from './routes';
-import { AUTH0_DOMAIN, AUTH0_CLIENT_ID } from './utils/env';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
