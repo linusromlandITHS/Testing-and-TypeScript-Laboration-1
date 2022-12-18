@@ -14,6 +14,8 @@ export default function JoinModal({
 	onClose: () => void;
 	onSubmit: (code: string) => void;
 }): JSX.Element {
+	if (!onClose || !onSubmit) throw new Error('JoinModal component is missing a required prop');
+
 	const [code, setCode] = useState('');
 	const [valid, setValid] = useState(true);
 
@@ -24,6 +26,7 @@ export default function JoinModal({
 				onSubmit={(event: React.FormEvent): void => {
 					event.preventDefault();
 					const code: string = (event.target as HTMLFormElement).code.value;
+					if (!valid) return;
 					onSubmit(code);
 				}}
 			>
@@ -32,20 +35,23 @@ export default function JoinModal({
 					type="text"
 					className={style.input}
 					maxLength={6}
-					invalid={!valid}
+					invalid={!valid && code.length >= 6}
 					onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
 						//Check that the code matched two first letter and 4 numbers
 						const code: string = event.target.value.toUpperCase();
 						setCode(code);
-						if (code.length < 6) return setValid(true);
-
 						const regex: RegExp = /^[A-Z]{2}[0-9]{4}$/;
 						setValid(regex.test(code));
-						console.log('Is valid: ' + regex.test(code));
 					}}
 					value={code}
 				/>
-				<Button text="JOIN MATCH" onClick={(): void => console.log('buttonClick')} />
+				<Button
+					text="JOIN MATCH"
+					onClick={(): void => {
+						if (!valid) return;
+						onSubmit(code);
+					}}
+				/>
 			</form>
 		</Modal>
 	);

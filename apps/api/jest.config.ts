@@ -1,6 +1,8 @@
+// External dependencies
 import type { Config } from 'jest';
-
 import { pathsToModuleNameMapper } from 'ts-jest';
+
+// Internal dependencies
 import { compilerOptions } from './tsconfig.json';
 
 const config: Config = {

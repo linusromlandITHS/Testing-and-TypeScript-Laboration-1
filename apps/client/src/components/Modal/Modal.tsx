@@ -11,6 +11,8 @@ export default function Modal({
 	title: string;
 	onClose: () => void;
 }): JSX.Element {
+	if (!children || !title || !onClose) throw new Error('Modal component is missing a required prop');
+
 	return (
 		<div className={style.container}>
 			<div className={style.content}>
