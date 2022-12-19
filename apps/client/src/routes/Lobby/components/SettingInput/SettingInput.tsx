@@ -54,6 +54,7 @@ export default function SettingInput({
 		<p className={style.setting}>
 			{label}:{' '}
 			<span className={style.settingValue}>
+				{value === undefined && 'none selected'}
 				{options
 					? options.find((option: { value: string; label: string }): boolean => option.value === value)?.label
 					: value}
