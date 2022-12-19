@@ -22,13 +22,15 @@ export default function Lobby(): JSX.Element {
 		difficulty: string;
 		timePerQuestion: number;
 		numberOfQuestions: number;
+		private: boolean;
 	}>({
 		region: '',
 		category: '',
 		tag: '',
 		difficulty: '',
 		timePerQuestion: 0,
-		numberOfQuestions: 0
+		numberOfQuestions: 0,
+		private: false
 	});
 	const [players, setPlayers] = useState<Player[]>([
 		{
@@ -57,7 +59,7 @@ export default function Lobby(): JSX.Element {
 		}
 	]);
 	const [gamePin, setGamePin] = useState<string>('AB1234');
-	const [host, setHost] = useState<boolean>(false);
+	const [host, setHost] = useState<boolean>(true);
 
 	useEffect(() => {
 		getOptions().then((options: Options) => setOptions(options));
@@ -158,6 +160,15 @@ export default function Lobby(): JSX.Element {
 								}
 								edit={host}
 								inputType="number"
+							/>
+							<SettingInput
+								label="Private game"
+								value={optionValues.private.toString()}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, private: value?.value === 'true' })
+								}
+								edit={host}
+								inputType="checkbox"
 							/>
 						</div>
 					</div>

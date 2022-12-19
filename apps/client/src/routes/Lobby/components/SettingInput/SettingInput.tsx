@@ -50,6 +50,23 @@ export default function SettingInput({
 			</div>
 		);
 
+	if (edit && inputType === 'checkbox')
+		return (
+			<div className={style.setting}>
+				<label className={style.label}>{label}</label>
+				<input
+					type="checkbox"
+					checked={value === 'true'}
+					onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+						onChange({
+							value: event.target.checked ? 'true' : 'false',
+							label: event.target.checked ? 'true' : 'false'
+						})
+					}
+				/>
+			</div>
+		);
+
 	return (
 		<p className={style.setting}>
 			{label}:{' '}
