@@ -11,4 +11,13 @@
 	--secondary-color: #7d7d7d;
 	--error-color: #e23636;
 	--success-color: #82dd55;
+
+	--toastify-color-success: var(--success-color);
+	--toastify-color-error: var(--error-color);
+}
+
+/* Override default react-toastify styles */
+/* Remove border radius */
+.Toastify__toast {
+	border-radius: 0 !important;
 }
