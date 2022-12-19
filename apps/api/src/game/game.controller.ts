@@ -33,4 +33,18 @@ export class GameController {
 
 		return game; // Return the game
 	}
+
+	@Get(':gameId/exists')
+	async gameExists(
+		@Param('gameId') gameId: string,
+		@Headers('Authorization') token: string
+	): Promise<boolean | HttpStatus> {
+		token = token.split(' ')[1]; // Remove the "Bearer " from the token
+
+		const gameExists: boolean = await this.gameService.gameExists(token, gameId);
+
+		if (!gameExists) throw new HttpException('Game not found', 404); // If the game is not found, throw a 404 error
+
+		return gameExists; // Return the game
+	}
 }

@@ -79,6 +79,18 @@ export class GameService {
 		return game; // Return the game
 	}
 
+	async gameExists(token: string, gameId: string): Promise<boolean> {
+		const user: Player = getUserInformation(token); // Get the user's information from the auth server
+
+		if (!user) return null; // If the user doesn't exist, return null
+
+		const game: GameInformation = _games.find((game: GameInformation) => game.id === gameId); // Find the game
+
+		if (!game) return null; // If the game doesn't exist, return null
+
+		return game.players.find((player: Player) => player.id === user.id) ? true : false; // , check if the user is in the game
+	}
+
 	async changeSettings(data: WebSocketEvent, user: Player): Promise<GameInformation> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 

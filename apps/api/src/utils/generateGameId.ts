@@ -5,7 +5,6 @@ export default function generateGameId(ids: string[]): string {
 	for (let i: number = 0; i < 2; i++) {
 		id += characters.charAt(Math.floor(Math.random() * characters.length));
 	}
-	id += '-';
 	for (let i: number = 0; i < 4; i++) {
 		id += numbers.charAt(Math.floor(Math.random() * numbers.length));
 	}

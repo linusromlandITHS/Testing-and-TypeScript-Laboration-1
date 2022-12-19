@@ -1,11 +1,12 @@
 //External dependencies
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useAuth0 } from '@auth0/auth0-react';
 
 // Internal dependencies
 import { getOptions } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
-import { OptionItem, Options, Player } from '_packages/shared/src/types';
+import { GameInformation, OptionItem, Options, Player } from '_packages/shared/src/types';
 import Background from '$src/components/Background/Background';
 import SettingInput from './components/SettingInput/SettingInput';
 import CopyIcon from '$src/assets/icons/copy.svg';
@@ -13,7 +14,9 @@ import style from './Lobby.module.css';
 import PlayerCard from '$src/components/PlayerCard/PlayerCard';
 import { PlayerStatus } from '_packages/shared/src/enums';
 
-export default function Lobby(): JSX.Element {
+export default function Lobby({ game }: { game: GameInformation }): JSX.Element {
+	const { user } = useAuth0();
+
 	const [options, setOptions] = useState<Options | undefined>(undefined);
 	const [optionValues, setOptionValues] = useState<{
 		region: string;
@@ -64,6 +67,23 @@ export default function Lobby(): JSX.Element {
 	useEffect(() => {
 		getOptions().then((options: Options) => setOptions(options));
 	}, []);
+
+	useEffect(() => {
+		if (game) {
+			setGamePin(game.id);
+			setPlayers(game.players);
+			setOptionValues({
+				region: game.settings.region || '',
+				category: game.settings.category || '',
+				tag: game.settings.tag || '',
+				difficulty: game.settings.difficulty || '',
+				timePerQuestion: game.settings.questionTime || 0,
+				numberOfQuestions: game.settings.questionCount || 0,
+				private: game.settings.isPrivate || true
+			});
+			setHost(game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.HOST);
+		}
+	}, [game]);
 
 	return (
 		<Background>

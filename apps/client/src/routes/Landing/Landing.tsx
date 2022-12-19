@@ -1,17 +1,20 @@
 // External dependencies
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 // Internal dependencies
 import { GameInformation, HealthResult } from '_packages/shared/src/types';
 import { HTTPError } from '$src/types';
-import { createMatch, getHealth, joinMatch } from '$src/utils/api';
+import { createMatch, getHealth, matchExists } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
 import Card from './components/Card/Card';
 import JoinModal from './components/JoinModal/JoinModal';
 import style from './Landing.module.css';
 
 export default function Landing(): JSX.Element {
+	const navigate: NavigateFunction = useNavigate();
+
 	const [joinModal, setJoinModal] = useState(false);
 	const [joinLoading, setJoinLoading] = useState(false);
 	const [createLoading, setCreateLoading] = useState(false);
@@ -39,7 +42,7 @@ export default function Landing(): JSX.Element {
 								if (await checkHealth()) {
 									const game: GameInformation | HTTPError = await createMatch();
 									if ('message' in game) toast.error(game.message);
-									console.log(game);
+									else navigate(`/game/${game.id}/`);
 								}
 								setCreateLoading(false);
 							}}
@@ -78,10 +81,10 @@ export default function Landing(): JSX.Element {
 					onClose={(): void => setJoinModal(false)}
 					onSubmit={async (code: string): Promise<void> => {
 						setJoinLoading(true);
-						const game: GameInformation | HTTPError = await joinMatch(code);
+						const gameExists: boolean | HTTPError = await matchExists(code);
 						setJoinLoading(false);
-						if ('message' in game) toast.error(game.message);
-						else console.log(game);
+						if (!gameExists) toast.error('Game does not exist');
+						else navigate(`/game/${code}/`);
 					}}
 					loading={joinLoading}
 				/>

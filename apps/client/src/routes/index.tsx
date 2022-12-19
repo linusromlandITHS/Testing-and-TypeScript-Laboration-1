@@ -8,10 +8,10 @@ import api from '$src/utils/api/api';
 
 // Routes imports
 import Home from './Landing/Landing';
-import Lobby from './Lobby/Lobby';
+import Game from './Game/Game';
 
 export default function routes(): JSX.Element {
-	const { getIdTokenClaims, loginWithPopup, user } = useAuth0();
+	const { getIdTokenClaims, loginWithPopup } = useAuth0();
 	const [token, setToken] = useState('');
 
 	const checkAuth: () => Promise<void> = async (): Promise<void> => {
@@ -22,7 +22,6 @@ export default function routes(): JSX.Element {
 			if (idToken) {
 				setToken(idToken);
 				api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
-				console.log(user);
 			} else {
 				setToken('');
 			}
@@ -44,7 +43,7 @@ export default function routes(): JSX.Element {
 	return (
 		<Routes>
 			<Route path="/" element={<Home />} />
-			<Route path="/lobby" element={<Lobby />} />
+			<Route path="/game/:gamePin/*" element={<Game />} />
 		</Routes>
 	);
 }
