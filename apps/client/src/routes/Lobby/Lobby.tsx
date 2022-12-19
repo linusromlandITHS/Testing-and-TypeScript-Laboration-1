@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 // Internal dependencies
 import { getOptions } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
-import { Options, Player } from '_packages/shared/src/types';
+import { OptionItem, Options, Player } from '_packages/shared/src/types';
 import Background from '$src/components/Background/Background';
 import SettingInput from './components/SettingInput/SettingInput';
 import CopyIcon from '$src/assets/icons/copy.svg';
@@ -57,7 +57,7 @@ export default function Lobby(): JSX.Element {
 		}
 	]);
 	const [gamePin, setGamePin] = useState<string>('AB1234');
-	const [host, setHost] = useState<boolean>(true);
+	const [host, setHost] = useState<boolean>(false);
 
 	useEffect(() => {
 		getOptions().then((options: Options) => setOptions(options));
@@ -88,46 +88,74 @@ export default function Lobby(): JSX.Element {
 							<SettingInput
 								label="Region"
 								options={options?.regions}
-								value={options?.regions[0].value}
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={
+									options?.regions[
+										options?.regions.findIndex((region: OptionItem) => region.value === optionValues.region)
+									]?.value
+								}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, region: value?.value || '' })
+								}
 								edit={host}
 								inputType="select"
 							/>
 							<SettingInput
 								label="Category"
 								options={options?.categories}
-								value={options?.categories[0].value}
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={
+									options?.categories[
+										options?.categories.findIndex((category: OptionItem) => category.value === optionValues.category)
+									]?.value
+								}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, category: value?.value || '' })
+								}
 								edit={host}
 								inputType="select"
 							/>
 							<SettingInput
 								label="Tag"
 								options={options?.tags}
-								value={options?.tags[0].value}
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={
+									options?.tags[options?.tags.findIndex((tag: OptionItem) => tag.value === optionValues.tag)]?.value
+								}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, tag: value?.value || '' })
+								}
 								edit={host}
 								inputType="select"
 							/>
 							<SettingInput
 								label="Difficulty"
 								options={options?.difficulties}
-								value={options?.difficulties[0].value}
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={
+									options?.difficulties[
+										options?.difficulties.findIndex(
+											(difficulty: OptionItem) => difficulty.value === optionValues.difficulty
+										)
+									]?.value
+								}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, difficulty: value?.value || '' })
+								}
 								edit={host}
 								inputType="select"
 							/>
 							<SettingInput
 								label="Time per question (seconds)"
-								value="30"
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={optionValues.timePerQuestion.toString()}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, timePerQuestion: Number(value?.value) || 0 })
+								}
 								edit={host}
 								inputType="number"
 							/>
 							<SettingInput
 								label="Number of questions"
-								value="10"
-								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
+								value={optionValues.numberOfQuestions.toString()}
+								onChange={(value: { value: string; label: string } | undefined): void =>
+									setOptionValues({ ...optionValues, numberOfQuestions: Number(value?.value) || 0 })
+								}
 								edit={host}
 								inputType="number"
 							/>
