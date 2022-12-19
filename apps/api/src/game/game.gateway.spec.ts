@@ -160,7 +160,7 @@ describe('GameGateway', () => {
 				questionTime: 10,
 				region: 'US',
 				category: 'music',
-				difficulty: 'hard',
+				difficulty: 'puck',
 				tag: 'colours'
 			}
 		});

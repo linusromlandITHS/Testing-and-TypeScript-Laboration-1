@@ -26,9 +26,7 @@ const _games: GameInformation[] = [];
 @Injectable()
 export class GameService {
 	async createGame(token: string): Promise<GameInformation> {
-		const user: Player = await getUserInformation(token); // Get the user's information from the auth server
-
-		console.log(user);
+		const user: Player = getUserInformation(token); // Get the user's information from the auth server
 
 		if (!user) return null; // If the user doesn't exist, return null
 
@@ -62,7 +60,7 @@ export class GameService {
 	}
 
 	async joinGame(token: string, gameId: string, user?: Player): Promise<GameInformation> {
-		if (!user) user = await getUserInformation(token); // Get the user's information from the auth server
+		if (!user) user = getUserInformation(token); // Get the user's information from the auth server
 
 		if (!user) return null; // If the user doesn't exist, return null
 

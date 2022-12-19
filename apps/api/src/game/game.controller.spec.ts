@@ -31,16 +31,4 @@ describe('GameController', () => {
 		const result: GameInformation = await controller.createGame(`Bearer ${accessToken}`);
 		validateGame(result);
 	});
-
-	it('should join a game', async () => {
-		const accessToken: string = await getAccessToken();
-
-		const createGameResult: GameInformation = await controller.createGame(`Bearer ${accessToken}`);
-		const gameId: string = createGameResult.id;
-
-		const result: GameInformation | HttpStatus = await controller.joinGame(`Bearer ${accessToken}`, gameId);
-
-		//Should fail since same user is joining
-		expect(result).toBe(HttpStatus.NOT_FOUND);
-	});
 });

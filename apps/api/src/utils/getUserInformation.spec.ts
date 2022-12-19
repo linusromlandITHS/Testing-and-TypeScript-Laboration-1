@@ -6,7 +6,7 @@ import { Player } from '_packages/shared/src/types';
 describe('getUserInformation', () => {
 	it('should get the user information', async () => {
 		const accessToken: string = await getAccessToken();
-		const userInformation: Player = await getUserInformation(accessToken);
+		const userInformation: Player = getUserInformation(accessToken);
 		expect(userInformation).toHaveProperty('id');
 		expect(userInformation).toHaveProperty('email');
 		expect(userInformation).toHaveProperty('imageURL');

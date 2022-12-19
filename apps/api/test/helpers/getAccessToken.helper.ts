@@ -16,7 +16,7 @@ export default async function getAccessToken(): Promise<string> {
 	const httpService: HttpService = new HttpService();
 
 	type Auth0M2MObject = {
-		access_token: string;
+		id_token: string;
 		expires_in: number;
 		token_type: string;
 	};
@@ -29,10 +29,10 @@ export default async function getAccessToken(): Promise<string> {
 			client_secret: AUTH0_CLIENT_SECRET,
 			audience: `https://${AUTH0_DOMAIN}/api/v2/`,
 			grant_type: 'password',
-			scope: 'openid'
+			scope: 'openid profile email'
 		})
 		.pipe(map((response: AxiosResponse) => response.data));
 
 	const data: Auth0M2MObject = await lastValueFrom(observable);
-	return data.access_token;
+	return data.id_token;
 }

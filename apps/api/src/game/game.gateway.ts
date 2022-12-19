@@ -35,7 +35,7 @@ export class GameGateway {
 			const token: string = client.handshake.headers['authorization']?.split(' ')[1];
 
 			//Get user information
-			const userInformation: Player = await getUserInformation(token);
+			const userInformation: Player = getUserInformation(token);
 
 			if (data.event in this.events) {
 				const gameInformation: GameInformation | void = await this.events[data.event](data, userInformation, client);
