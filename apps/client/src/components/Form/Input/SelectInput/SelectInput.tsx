@@ -2,15 +2,16 @@
 import Select, { SingleValue } from 'react-select';
 
 // Internal dependencies
-import style from './SelectInput.module.css';
 import './SelectInput.css';
 
 export default function SelectInput({
 	options,
 	onChange,
+	value,
 	...props
 }: {
 	options: { value: string; label: string }[];
+	value?: { value: string; label: string };
 	onChange?: (value: { value: string; label: string }) => void;
 	props?: unknown;
 }): JSX.Element {
@@ -18,6 +19,7 @@ export default function SelectInput({
 		<Select
 			options={options}
 			classNamePrefix="react-select"
+			value={value}
 			onChange={(newValue: SingleValue<{ value: string; label: string }>): void => {
 				if (onChange) onChange(newValue as { value: string; label: string });
 			}}

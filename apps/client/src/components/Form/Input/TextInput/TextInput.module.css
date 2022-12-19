@@ -17,6 +17,10 @@
 	margin: 0;
 }
 
+.valid {
+	border-bottom: 2px solid var(--success-color);
+}
+
 .invalid {
 	border-bottom: 2px solid var(--error-color);
 	animation: shake 250ms;

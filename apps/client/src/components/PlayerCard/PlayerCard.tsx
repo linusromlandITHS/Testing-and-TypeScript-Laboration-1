@@ -15,6 +15,9 @@ export default function PlayerCard({
 	score?: number;
 	stage: 'lobby' | 'leaderboard';
 }): JSX.Element {
+	if (!imageURL || !name || !stage || !['lobby', 'leaderboard'].includes(stage))
+		throw new Error('PlayerCard: Missing required props');
+
 	return (
 		<div className={style.card}>
 			<img className={style.image} src={imageURL} alt={name} />

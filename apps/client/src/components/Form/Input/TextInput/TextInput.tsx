@@ -8,6 +8,7 @@ export default function TextInput({
 	maxLength,
 	value,
 	invalid,
+	valid,
 	onChange,
 	small,
 	...props
@@ -18,6 +19,7 @@ export default function TextInput({
 	maxLength?: number;
 	value?: string;
 	invalid?: boolean;
+	valid?: boolean;
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	small?: boolean;
 	props?: unknown;
@@ -26,7 +28,9 @@ export default function TextInput({
 		<input
 			placeholder={placeholder}
 			type={type}
-			className={`${style.input} ${className} ${invalid ? style.invalid : ''} ${small ? style.small : ''}`}
+			className={`${style.input} ${className} ${invalid ? style.invalid : valid ? style.valid : ''} ${
+				small ? style.small : ''
+			}`}
 			maxLength={maxLength}
 			value={value}
 			onChange={onChange}

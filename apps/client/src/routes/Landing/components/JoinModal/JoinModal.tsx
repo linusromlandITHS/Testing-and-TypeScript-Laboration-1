@@ -38,6 +38,7 @@ export default function JoinModal({
 					className={style.input}
 					maxLength={6}
 					invalid={!valid && code.length >= 6}
+					valid={valid && code.length >= 6}
 					onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
 						//Check that the code matched two first letter and 4 numbers
 						const code: string = event.target.value.toUpperCase();

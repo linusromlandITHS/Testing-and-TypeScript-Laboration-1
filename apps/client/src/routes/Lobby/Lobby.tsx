@@ -59,7 +59,7 @@ export default function Lobby(): JSX.Element {
 		}
 	]);
 	const [gamePin, setGamePin] = useState<string>('AB1234');
-	const [host, setHost] = useState<boolean>(true);
+	const [host, setHost] = useState<boolean>(false);
 
 	useEffect(() => {
 		getOptions().then((options: Options) => setOptions(options));
