@@ -83,7 +83,8 @@ export default function Landing(): JSX.Element {
 						setJoinLoading(true);
 						const gameExists: boolean | HTTPError = await matchExists(code);
 						setJoinLoading(false);
-						if (!gameExists) toast.error('Game does not exist');
+						if (!gameExists || (gameExists as HTTPError).statusCode == 404)
+							toast.error('Could not find a match with that code');
 						else navigate(`/game/${code}/`);
 					}}
 					loading={joinLoading}
