@@ -4,10 +4,10 @@ import { useState } from 'react';
 // Internal dependencies
 import { HealthResult } from '_packages/shared/src/types';
 import getHealth from '$src/api/health';
-import JoinModal from '$src/components/JoinModal/JoinModal';
 import Modal from '$src/components/Modal/Modal';
 import Button from '$src/components/Button/Button';
-import Card from '$src/components/Card/Card';
+import Card from './components/Card/Card';
+import JoinModal from './components/JoinModal/JoinModal';
 import style from './Landing.module.css';
 
 export default function Landing(): JSX.Element {
