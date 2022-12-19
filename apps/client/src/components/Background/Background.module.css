@@ -20,4 +20,15 @@
 .content {
 	position: relative;
 	z-index: 1;
+
+	/** if all can not be fit in the screen, then scroll */
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-height: 90vh;
+}
+
+@media (max-width: 768px) {
+	.content {
+		max-height: 100vh;
+	}
 }

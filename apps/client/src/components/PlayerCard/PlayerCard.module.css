@@ -1,0 +1,45 @@
+.card {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.image {
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.info {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.name {
+	font-size: 1.2rem;
+	font-weight: 500;
+}
+
+.status {
+	font-size: 0.7rem;
+	font-weight: 400;
+	padding: 0.2rem 1rem;
+	border-radius: 1rem;
+	color: white;
+}
+
+.ready {
+	background-color: var(--success-color);
+}
+
+.notReady {
+	background-color: var(--error-color);
+}
+
+.host {
+	background-color: var(--primary-color);
+}

@@ -61,4 +61,27 @@
 
 .players {
 	grid-column: 2 / 3;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.buttons {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+	.mainContent {
+		grid-template-columns: 1fr;
+	}
+	.settings {
+		grid-column: 1 / 2;
+		padding-right: 0;
+		border-right: none;
+	}
+	.players {
+		grid-column: 1 / 2;
+	}
 }

@@ -1,16 +1,62 @@
 //External dependencies
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 // Internal dependencies
 import { getOptions } from '$src/utils/api';
-import { Options } from '_packages/shared/src/types';
+import Button from '$src/components/Button/Button';
+import { Options, Player } from '_packages/shared/src/types';
 import Background from '$src/components/Background/Background';
 import SettingInput from './components/SettingInput/SettingInput';
 import CopyIcon from '$src/assets/icons/copy.svg';
 import style from './Lobby.module.css';
+import PlayerCard from '$src/components/PlayerCard/PlayerCard';
+import { PlayerStatus } from '_packages/shared/src/enums';
 
 export default function Lobby(): JSX.Element {
 	const [options, setOptions] = useState<Options | undefined>(undefined);
+	const [optionValues, setOptionValues] = useState<{
+		region: string;
+		category: string;
+		tag: string;
+		difficulty: string;
+		timePerQuestion: number;
+		numberOfQuestions: number;
+	}>({
+		region: '',
+		category: '',
+		tag: '',
+		difficulty: '',
+		timePerQuestion: 0,
+		numberOfQuestions: 0
+	});
+	const [players, setPlayers] = useState<Player[]>([
+		{
+			id: '1',
+			name: 'Player 1',
+			email: 'player1@example.com',
+			status: PlayerStatus.HOST,
+			imageURL: 'https://thispersondoesnotexist.com/image',
+			score: 0
+		},
+		{
+			id: '2',
+			name: 'Player 2',
+			email: 'player2@example.com',
+			status: PlayerStatus.READY,
+			imageURL: 'https://thispersondoesnotexist.com/image',
+			score: 0
+		},
+		{
+			id: '3',
+			name: 'Player 3',
+			email: 'player3@example.com',
+			status: PlayerStatus.NOT_READY,
+			imageURL: 'https://thispersondoesnotexist.com/image',
+			score: 0
+		}
+	]);
+	const [gamePin, setGamePin] = useState<string>('AB1234');
 	const [host, setHost] = useState<boolean>(true);
 
 	useEffect(() => {
@@ -23,8 +69,14 @@ export default function Lobby(): JSX.Element {
 				<div>
 					<h2 className={style.title}>Match Lobby</h2>
 					<p className={style.gamePin}>
-						Game PIN: <span className={style.gamePinValue}>AB1234 </span>
-						<button className={style.copyButton}>
+						Game PIN: <span className={style.gamePinValue}>{gamePin}</span>
+						<button
+							className={style.copyButton}
+							onClick={async (): Promise<void> => {
+								await navigator.clipboard.writeText(gamePin);
+								toast.success('Copied to clipboard');
+							}}
+						>
 							<CopyIcon />
 						</button>
 					</p>
@@ -66,7 +118,7 @@ export default function Lobby(): JSX.Element {
 								inputType="select"
 							/>
 							<SettingInput
-								label="Time per question"
+								label="Time per question (seconds)"
 								value="30"
 								onChange={(value: { value: string; label: string } | undefined): void => console.log(value)}
 								edit={host}
@@ -83,7 +135,44 @@ export default function Lobby(): JSX.Element {
 					</div>
 					<div className={style.players}>
 						<h3 className={style.subtitle}>Players</h3>
+						{players.map((player: Player) => (
+							<PlayerCard
+								key={player.name}
+								name={player.name}
+								imageURL={player.imageURL}
+								status={player.status}
+								score={player.score}
+								stage={'lobby'}
+							/>
+						))}
 					</div>
+				</div>
+				<div className={style.buttons}>
+					<Button
+						text="Back"
+						onClick={(): void => {
+							console.log('Back');
+						}}
+						secondary
+						small
+					/>
+					{host ? (
+						<Button
+							text="Start Game"
+							onClick={(): void => {
+								console.log('Start Game');
+							}}
+							small
+						/>
+					) : (
+						<Button
+							text="I'm Ready"
+							onClick={(): void => {
+								console.log('I am Ready');
+							}}
+							small
+						/>
+					)}
 				</div>
 			</div>
 		</Background>
