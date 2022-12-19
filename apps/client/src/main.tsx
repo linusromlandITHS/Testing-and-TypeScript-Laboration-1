@@ -19,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 			clientId={AUTH0_CLIENT_ID}
 			redirectUri={window.location.origin}
 			cacheLocation="localstorage"
+			scope="openid profile email"
 		>
 			<BrowserRouter>
 				<Routes />

@@ -6,8 +6,8 @@ import { GameInformation } from '_packages/shared/src/types';
 import { HTTPError } from '$src/types';
 import api from './api';
 
-export default async function joinMatch(gameId: string): Promise<GameInformation | HTTPError> {
-	const response: AxiosResponse = await api.get(`/game/${gameId}`);
+export default async function joinMatch(): Promise<GameInformation | HTTPError> {
+	const response: AxiosResponse = await api.post('/game');
 
 	return response.data;
 }

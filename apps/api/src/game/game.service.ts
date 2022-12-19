@@ -1,5 +1,5 @@
 // External dependencies
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { Socket } from 'socket.io';
 
@@ -27,6 +27,8 @@ const _games: GameInformation[] = [];
 export class GameService {
 	async createGame(token: string): Promise<GameInformation> {
 		const user: Player = await getUserInformation(token); // Get the user's information from the auth server
+
+		console.log(user);
 
 		if (!user) return null; // If the user doesn't exist, return null
 

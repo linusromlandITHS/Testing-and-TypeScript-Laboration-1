@@ -4,7 +4,8 @@ import { toast } from 'react-toastify';
 
 // Internal dependencies
 import { GameInformation, HealthResult } from '_packages/shared/src/types';
-import { getHealth, joinMatch } from '$src/utils/api';
+import { HTTPError } from '$src/types';
+import { createMatch, getHealth, joinMatch } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
 import Card from './components/Card/Card';
 import JoinModal from './components/JoinModal/JoinModal';
@@ -34,9 +35,13 @@ export default function Landing(): JSX.Element {
 							secondary
 							loading={createLoading}
 							onClick={async (): Promise<void> => {
-								setCreateLoading(!createLoading);
-								if (await checkHealth()) console.log('Create match');
-								// setCreateLoading(false);
+								setCreateLoading(true);
+								if (await checkHealth()) {
+									const game: GameInformation | HTTPError = await createMatch();
+									if ('message' in game) toast.error(game.message);
+									console.log(game);
+								}
+								setCreateLoading(false);
 							}}
 						/>
 						<Button
@@ -73,13 +78,10 @@ export default function Landing(): JSX.Element {
 					onClose={(): void => setJoinModal(false)}
 					onSubmit={async (code: string): Promise<void> => {
 						setJoinLoading(true);
-						const game: GameInformation | number = await joinMatch(code);
+						const game: GameInformation | HTTPError = await joinMatch(code);
 						setJoinLoading(false);
-						if (game === 404) {
-							toast.error('Match not found');
-							return;
-						}
-						console.log(game);
+						if ('message' in game) toast.error(game.message);
+						else console.log(game);
 					}}
 					loading={joinLoading}
 				/>
