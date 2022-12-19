@@ -95,7 +95,23 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		return game.players.find((player: Player) => player.id === user.id) ? true : false; // , check if the user is in the game
+		return game.settings.isPrivate ? false : true; // , check if the user is in the game
+	}
+
+	async leaveGame(token: string, client: Socket): Promise<void> {
+		const user: Player = getUserInformation(token); // Get the user's information from the auth server
+
+		if (!user) return null; // If the user doesn't exist, return null
+
+		console.log(user);
+
+		//Remove the user from all the games
+		for (let i: number = 0; i < _games.length; i++) {
+			if (_games[i].players.find((player: Player) => player.id === user.id)) {
+				_games[i].players = _games[i].players.filter((player: Player) => player.id !== user.id);
+				client.broadcast.emit(_games[i].id, _games[i]);
+			}
+		}
 	}
 
 	async changeSettings(data: WebSocketEvent, user: Player): Promise<GameInformation> {

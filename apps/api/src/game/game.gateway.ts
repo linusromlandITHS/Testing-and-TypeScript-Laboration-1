@@ -56,4 +56,14 @@ export class GameGateway {
 			console.log('Error: ', error);
 		}
 	}
+
+	@SubscribeMessage('disconnect')
+	handleDisconnect(client: Socket): void {
+		//Read WS Headers
+		const token: string = client.handshake.headers['authorization']?.split(' ')[1];
+		console.log(`User ${token} disconnected`);
+		if (!token) return;
+
+		this.gameService.leaveGame(token, client);
+	}
 }
