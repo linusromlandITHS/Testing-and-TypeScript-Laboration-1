@@ -1,6 +1,4 @@
 export default function generateGameId(ids: string[]): string {
-	return 'AB-1234';
-
 	const characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	const numbers: string = '0123456789';
 	let id: string = '';
