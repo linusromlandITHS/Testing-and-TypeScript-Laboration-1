@@ -163,7 +163,7 @@ export default function Lobby(): JSX.Element {
 							/>
 							<SettingInput
 								label="Private game"
-								value={optionValues.private.toString()}
+								value={optionValues.private ? 'Yes' : 'No'}
 								onChange={(value: { value: string; label: string } | undefined): void =>
 									setOptionValues({ ...optionValues, private: value?.value === 'true' })
 								}

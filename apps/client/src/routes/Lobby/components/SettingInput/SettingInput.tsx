@@ -24,7 +24,6 @@ export default function SettingInput({
 				<label className={style.label}>{label}</label>
 				<SelectInput
 					options={options}
-					// @ts-expect-error react-select types are wrong
 					value={options.find((option: { value: string; label: string }): boolean => option.value === value)}
 					onChange={onChange}
 				/>
