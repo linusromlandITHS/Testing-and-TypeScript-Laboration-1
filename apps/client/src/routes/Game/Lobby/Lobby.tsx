@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Socket } from 'socket.io-client';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 // Internal dependencies
 import { getOptions } from '$src/utils/api';
@@ -14,8 +16,9 @@ import style from './Lobby.module.css';
 import PlayerCard from '$src/components/PlayerCard/PlayerCard';
 import { PlayerStatus } from '_packages/shared/src/enums';
 
-export default function Lobby({ game }: { game: GameInformation }): JSX.Element {
+export default function Lobby({ game, socket }: { game: GameInformation; socket: Socket }): JSX.Element {
 	const { user } = useAuth0();
+	const navigate: NavigateFunction = useNavigate();
 
 	const [options, setOptions] = useState<Options | undefined>(undefined);
 	const [optionValues, setOptionValues] = useState<{
@@ -23,17 +26,17 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 		category: string;
 		tag: string;
 		difficulty: string;
-		timePerQuestion: number;
-		numberOfQuestions: number;
-		private: boolean;
+		questionTime: number;
+		questionCount: number;
+		isPrivate: boolean;
 	}>({
 		region: '',
 		category: '',
 		tag: '',
 		difficulty: '',
-		timePerQuestion: 0,
-		numberOfQuestions: 0,
-		private: false
+		questionTime: 0,
+		questionCount: 0,
+		isPrivate: false
 	});
 	const [players, setPlayers] = useState<Player[]>([
 		{
@@ -70,20 +73,40 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 
 	useEffect(() => {
 		if (game) {
+			console.log(game);
 			setGamePin(game.id);
 			setPlayers(game.players);
-			setOptionValues({
-				region: game.settings.region || '',
-				category: game.settings.category || '',
-				tag: game.settings.tag || '',
-				difficulty: game.settings.difficulty || '',
-				timePerQuestion: game.settings.questionTime || 0,
-				numberOfQuestions: game.settings.questionCount || 0,
-				private: game.settings.isPrivate || true
-			});
+			//Check if any of the settings are different from the current settings
+			if (
+				game.settings.region !== optionValues.region ||
+				game.settings.category !== optionValues.category ||
+				game.settings.tag !== optionValues.tag ||
+				game.settings.difficulty !== optionValues.difficulty ||
+				game.settings.questionTime !== optionValues.questionTime ||
+				game.settings.questionCount !== optionValues.questionCount ||
+				game.settings.isPrivate !== optionValues.isPrivate
+			)
+				setOptionValues({
+					region: game.settings.region || '',
+					category: game.settings.category || '',
+					tag: game.settings.tag || '',
+					difficulty: game.settings.difficulty || '',
+					questionTime: game.settings.questionTime || 0,
+					questionCount: game.settings.questionCount || 0,
+					isPrivate: game.settings.isPrivate || false
+				});
 			setHost(game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.HOST);
 		}
 	}, [game]);
+
+	useEffect(() => {
+		console.log(optionValues);
+		socket.emit('events', {
+			event: 'changeSettings',
+			gamePin: gamePin,
+			settings: optionValues
+		});
+	}, [optionValues]);
 
 	return (
 		<Background>
@@ -165,27 +188,27 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 							/>
 							<SettingInput
 								label="Time per question (seconds)"
-								value={optionValues.timePerQuestion.toString()}
+								value={optionValues.questionTime.toString()}
 								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, timePerQuestion: Number(value?.value) || 0 })
+									setOptionValues({ ...optionValues, questionTime: Number(value?.value) || 0 })
 								}
 								edit={host}
 								inputType="number"
 							/>
 							<SettingInput
 								label="Number of questions"
-								value={optionValues.numberOfQuestions.toString()}
+								value={optionValues.questionCount.toString()}
 								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, numberOfQuestions: Number(value?.value) || 0 })
+									setOptionValues({ ...optionValues, questionCount: Number(value?.value) || 0 })
 								}
 								edit={host}
 								inputType="number"
 							/>
 							<SettingInput
 								label="Private game"
-								value={optionValues.private ? 'Yes' : 'No'}
+								value={optionValues.isPrivate ? 'true' : 'false'}
 								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, private: value?.value === 'true' })
+									setOptionValues({ ...optionValues, isPrivate: value?.value === 'true' })
 								}
 								edit={host}
 								inputType="checkbox"
@@ -196,7 +219,7 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 						<h3 className={style.subtitle}>Players</h3>
 						{players.map((player: Player) => (
 							<PlayerCard
-								key={player.name}
+								key={player.id}
 								name={player.name}
 								imageURL={player.imageURL}
 								status={player.status}
@@ -210,7 +233,7 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 					<Button
 						text="Back"
 						onClick={(): void => {
-							console.log('Back');
+							navigate('/');
 						}}
 						secondary
 						small
@@ -225,9 +248,22 @@ export default function Lobby({ game }: { game: GameInformation }): JSX.Element 
 						/>
 					) : (
 						<Button
-							text="I'm Ready"
+							text={
+								game &&
+								game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
+									? 'Not Ready'
+									: 'Ready'
+							}
 							onClick={(): void => {
-								console.log('I am Ready');
+								if (!game) return;
+								socket.emit('events', {
+									gamePin: game.id,
+									event: 'changePlayerStatus',
+									status:
+										game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
+											? PlayerStatus.NOT_READY
+											: PlayerStatus.READY
+								});
 							}}
 							small
 						/>

@@ -8,7 +8,7 @@ import { GameService } from './game.service';
 import getUserInformation from '$src/utils/getUserInformation';
 import validateWebSocketEvent from '$src/utils/validateWebSocketEvent';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class GameGateway {
 	constructor(private readonly gameService: GameService) {}
 
@@ -36,14 +36,18 @@ export class GameGateway {
 
 			//Get user information
 			const userInformation: Player = getUserInformation(token);
+			console.log(userInformation.id);
+			console.log(`User ${userInformation.name} sent event ${data.event} to game ${data.gamePin}`);
 
 			if (data.event in this.events) {
 				const gameInformation: GameInformation | void = await this.events[data.event](data, userInformation, client);
 
 				if (!gameInformation) return;
 
+				console.log(`Game ${data.gamePin} sent event ${data.event} to user ${userInformation.name}`);
 				//Emit to all clients
 				client.emit(data.gamePin, gameInformation);
+				client.broadcast.emit(data.gamePin, gameInformation);
 
 				return gameInformation;
 			}

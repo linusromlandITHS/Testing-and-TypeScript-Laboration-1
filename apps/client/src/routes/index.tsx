@@ -22,6 +22,7 @@ export default function routes(): JSX.Element {
 			if (idToken) {
 				setToken(idToken);
 				api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
+				localStorage.setItem('token', idToken);
 			} else {
 				setToken('');
 			}

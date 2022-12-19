@@ -76,6 +76,13 @@ export class GameService {
 				status: PlayerStatus.NOT_READY
 			}); // If the user isn't already in the game, add them
 
+		//If player is not the host and the game is private, return null
+		if (
+			game.settings.isPrivate &&
+			game.players.find((player: Player) => player.id === user.id).status !== PlayerStatus.HOST
+		)
+			return;
+
 		return game; // Return the game
 	}
 
@@ -108,6 +115,8 @@ export class GameService {
 		for (const key in data.settings) {
 			game.settings[key] = data.settings[key];
 		}
+
+		console.log(game.settings);
 
 		return game; // Return the game
 	}

@@ -73,6 +73,10 @@ export default function SettingInput({
 				{value === undefined && 'none selected'}
 				{options
 					? options.find((option: { value: string; label: string }): boolean => option.value === value)?.label
+					: value === 'true'
+					? 'Yes'
+					: value === 'false'
+					? 'No'
 					: value}
 			</span>
 		</p>
