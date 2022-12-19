@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 // Internal dependencies
 import { HealthResult } from '_packages/shared/src/types';
-import getHealth from '$src/api/health';
 import Modal from '$src/components/Modal/Modal';
+import { getHealth, joinMatch } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
 import Card from './components/Card/Card';
 import JoinModal from './components/JoinModal/JoinModal';
