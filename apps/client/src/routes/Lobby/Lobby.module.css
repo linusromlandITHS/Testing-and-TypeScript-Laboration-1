@@ -50,6 +50,8 @@
 	grid-column: 1 / 2;
 	padding-right: 1rem;
 	border-right: 2px solid var(--primary-color);
+	min-width: 20vw;
+	min-height: 30vh;
 }
 
 .settingsContent {
@@ -83,5 +85,8 @@
 	}
 	.players {
 		grid-column: 1 / 2;
+	}
+	.buttons {
+		flex-direction: column;
 	}
 }
