@@ -9,15 +9,17 @@ import style from './JoinModal.module.css';
 
 export default function JoinModal({
 	onClose,
-	onSubmit
+	onSubmit,
+	loading
 }: {
 	onClose: () => void;
 	onSubmit: (code: string) => void;
+	loading?: boolean;
 }): JSX.Element {
 	if (!onClose || !onSubmit) throw new Error('JoinModal component is missing a required prop');
 
 	const [code, setCode] = useState('');
-	const [valid, setValid] = useState(true);
+	const [valid, setValid] = useState(false);
 
 	return (
 		<Modal onClose={onClose} title="Enter Game PIN">
@@ -31,7 +33,7 @@ export default function JoinModal({
 				}}
 			>
 				<TextInput
-					placeholder="GAME PIN"
+					placeholder="GAME PIN (e.g. AB1234)"
 					type="text"
 					className={style.input}
 					maxLength={6}
@@ -47,6 +49,7 @@ export default function JoinModal({
 				/>
 				<Button
 					text="JOIN MATCH"
+					loading={loading}
 					onClick={(): void => {
 						if (!valid) return;
 						onSubmit(code);

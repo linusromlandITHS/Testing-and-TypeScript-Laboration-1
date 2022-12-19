@@ -1,9 +1,9 @@
 // External dependencies
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 // Internal dependencies
-import { HealthResult } from '_packages/shared/src/types';
-import Modal from '$src/components/Modal/Modal';
+import { GameInformation, HealthResult } from '_packages/shared/src/types';
 import { getHealth, joinMatch } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
 import Card from './components/Card/Card';
@@ -11,14 +11,14 @@ import JoinModal from './components/JoinModal/JoinModal';
 import style from './Landing.module.css';
 
 export default function Landing(): JSX.Element {
-	const [errorModal, setErrorModal] = useState(false);
 	const [joinModal, setJoinModal] = useState(false);
 	const [joinLoading, setJoinLoading] = useState(false);
 	const [createLoading, setCreateLoading] = useState(false);
 
 	async function checkHealth(): Promise<boolean> {
 		const health: HealthResult = await getHealth();
-		setErrorModal(!health.api.running || !health.triviaAPI.running);
+		if (!health.api.running) toast.error('Error connecting to Prueba API');
+		else if (!health.triviaAPI.running) toast.error('Error connecting to Trivia API');
 		return health.api.running && health.triviaAPI.running;
 	}
 
@@ -71,15 +71,18 @@ export default function Landing(): JSX.Element {
 			{joinModal && (
 				<JoinModal
 					onClose={(): void => setJoinModal(false)}
-					onSubmit={function (code: string): void {
-						console.log(code);
+					onSubmit={async (code: string): Promise<void> => {
+						setJoinLoading(true);
+						const game: GameInformation | number = await joinMatch(code);
+						setJoinLoading(false);
+						if (game === 404) {
+							toast.error('Match not found');
+							return;
+						}
+						console.log(game);
 					}}
+					loading={joinLoading}
 				/>
-			)}
-			{errorModal && (
-				<Modal onClose={(): void => setErrorModal(false)} title="Error">
-					<p>Something is not working as expected. We apologize for the inconvenience. Please try again later.</p>
-				</Modal>
 			)}
 		</>
 	);

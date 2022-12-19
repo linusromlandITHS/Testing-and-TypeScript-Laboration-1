@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { IdToken, useAuth0 } from '@auth0/auth0-react';
 
 // Internal dependencies
-import api from '$src/api';
+import api from '$src/utils/api/api';
 
 // Routes imports
 import Home from './Landing/Landing';
