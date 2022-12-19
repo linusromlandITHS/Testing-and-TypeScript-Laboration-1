@@ -4,7 +4,7 @@ import { useState } from 'react';
 // Internal dependencies
 import Modal from '$src/components/Modal/Modal';
 import Button from '$src/components/Button/Button';
-import TextInput from '$src/components/TextInput/TextInput';
+import TextInput from '$src/components/Form/Input/TextInput/TextInput';
 import style from './JoinModal.module.css';
 
 export default function JoinModal({

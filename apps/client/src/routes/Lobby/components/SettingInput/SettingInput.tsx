@@ -1,0 +1,63 @@
+// Internal dependencies
+import SelectInput from '$src/components/Form/Input/SelectInput/SelectInput';
+import TextInput from '$src/components/Form/Input/TextInput/TextInput';
+import style from './SettingInput.module.css';
+
+export default function SettingInput({
+	label,
+	options,
+	value,
+	onChange,
+	edit,
+	inputType
+}: {
+	label: string;
+	options?: { value: string; label: string }[];
+	value?: string;
+	onChange: (value: { value: string; label: string } | undefined) => void;
+	edit: boolean;
+	inputType: string;
+}): JSX.Element {
+	if (edit && inputType === 'select' && options)
+		return (
+			<div className={style.setting}>
+				<label className={style.label}>{label}</label>
+				<SelectInput
+					options={options}
+					// @ts-expect-error react-select types are wrong
+					value={options.find((option: { value: string; label: string }): boolean => option.value === value)}
+					onChange={onChange}
+				/>
+			</div>
+		);
+
+	if (edit && (inputType === 'text' || inputType === 'number'))
+		return (
+			<div className={style.setting}>
+				<label className={style.label}>{label}</label>
+				<TextInput
+					placeholder={label}
+					type={inputType}
+					value={value}
+					onChange={(event: React.ChangeEvent<HTMLInputElement>): void =>
+						onChange({
+							value: event.target.value,
+							label: event.target.value
+						})
+					}
+					small
+				/>
+			</div>
+		);
+
+	return (
+		<p className={style.setting}>
+			{label}:{' '}
+			<span className={style.settingValue}>
+				{options
+					? options.find((option: { value: string; label: string }): boolean => option.value === value)?.label
+					: value}
+			</span>
+		</p>
+	);
+}

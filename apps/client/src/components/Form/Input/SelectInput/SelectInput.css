@@ -1,0 +1,26 @@
+/* Flat styling for react-select */
+.react-select__control {
+	border-style: none !important;
+	border-bottom: 2px solid var(--primary-color) !important;
+	border-radius: 0 !important;
+}
+
+.react-select__control--is-focused {
+	outline: none !important;
+	border-bottom: 2px solid var(--primary-color) !important;
+}
+
+/* disable border-radius for react-select dropdown */
+.react-select__menu {
+	border-radius: 0 !important;
+}
+
+/* Set font-size to 1rem for react-select dropdown */
+.react-select__menu {
+	font-size: 1rem !important;
+}
+
+/* Set font-size to 1rem for react-select input and placeholder */
+.react-select__control {
+	font-size: 1rem !important;
+}
