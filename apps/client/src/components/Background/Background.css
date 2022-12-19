@@ -1,0 +1,4 @@
+.tk-blob {
+	--time: 100s;
+	--fill: var(--primary-color);
+}
