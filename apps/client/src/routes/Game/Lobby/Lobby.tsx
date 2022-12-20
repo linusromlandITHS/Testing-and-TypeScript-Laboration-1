@@ -225,8 +225,8 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 			</div>
 			{!host && (
 				<p className={style.waiting}>
-					Waiting for {game.players.find((player: Player) => player.status === PlayerStatus.HOST)?.name} to start the
-					game...
+					Waiting for {game ? game.players.find((player: Player) => player.status === PlayerStatus.HOST)?.name : ''} to
+					start the game...
 				</p>
 			)}
 			<div className={style.buttons}>

@@ -51,6 +51,7 @@ export default function Game(): JSX.Element {
 
 		return (): void => {
 			socket.off(gamePin);
+			socket.disconnect();
 		};
 	}, [gamePin]);
 

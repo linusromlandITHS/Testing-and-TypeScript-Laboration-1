@@ -58,8 +58,8 @@ export default function Leaderboard({ game, socket }: { game: GameInformation; s
 
 			{!isHost && !ended && (
 				<p className={style.waiting}>
-					Waiting for {game.players.find((player: Player) => player.status == PlayerStatus.HOST)?.name} to start the
-					next question
+					Waiting for {game ? game.players.find((player: Player) => player.status == PlayerStatus.HOST)?.name : ''} to
+					start the next question
 				</p>
 			)}
 

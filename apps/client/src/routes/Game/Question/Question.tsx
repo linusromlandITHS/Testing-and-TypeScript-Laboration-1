@@ -21,7 +21,7 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 	const [activeQuestion, setActiveQuestion] = useState<QuestionType | undefined>(undefined);
 
 	useEffect(() => {
-		setActiveQuestion(game.activeQuestion);
+		setActiveQuestion(game?.activeQuestion);
 		const interval: NodeJS.Timer = setInterval((): undefined => {
 			const result: number = (dayjs().diff(game.activeQuestion?.sentAt, 'ms') / QUESTION_INTRO_TIME) * 100;
 
@@ -38,7 +38,7 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 		return (): void => {
 			clearInterval(interval);
 		};
-	}, [game.activeQuestion?.sentAt]);
+	}, [game?.activeQuestion?.sentAt]);
 
 	useEffect(() => {
 		if (loading) return;
@@ -107,7 +107,9 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 
 	return (
 		<div className={style.content}>
-			<p className={style.questionNumber}>Question {game.previousQuestions.length + (result ? 0 : 1)}.</p>
+			<p className={style.questionNumber}>
+				Question {game ? game.previousQuestions.length + (result ? 0 : 1) : 0}/{game ? game.settings.questionCount : 0}
+			</p>
 			<h2 className={style.question}>{activeQuestion?.question}</h2>
 
 			<div className={style.timer}>
