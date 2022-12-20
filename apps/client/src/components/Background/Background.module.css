@@ -31,4 +31,10 @@
 	.content {
 		max-height: 100vh;
 	}
+
+	.blob {
+		width: 120%;
+		height: 120%;
+		bottom: -20%;
+	}
 }
