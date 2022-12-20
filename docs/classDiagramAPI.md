@@ -37,24 +37,28 @@ classDiagram
     class GameModule
     class GameController{
         -constructor(GameService gameService)
-        +createGame() Promise~GameInformation~
-        +joinGame() Promise~GameInformation~
+        +createGame(string token) Promise~GameInformation~
+        +joinGame(string token, string gameId) Promise~GameInformation~
+        +gameExists(string token, string gameId) Promise~boolean~
     }
     class GameGateway{
         -constructor(GameService gameService)
         -function[] events
         +handleMessage(Socket client, WebSocketEvent data) Promise~GameInformation | void~
+        +handleDisconnect(Socket client) Promise~void~
     }
     class GameService{
         -GameInformation[] _games
         +createGame(string token) Promise~GameInformation~
-        +createGame(string token, string gameId, Player user?) Promise~GameInformation~
+        +joinGame(string token, string gameId, Player user?) Promise~GameInformation~
+        +gameExists(string token, string gameId) Promise~boolean~
+        +leaveGame(string token, Socket client) Promise~void~
         +changeSettings(WebSocketEvent data, Player user) Promise~GameInformation~
         +changePlayerStatus(WebSocketEvent data, Player user) Promise~GameInformation~
         +answerQuestion(WebSocketEvent data, Player user) Promise~void~
         +nextQuestion(WebSocketEvent data, Player user, Socket client) Promise~GameInformation | void~
         +startGame(WebSocketEvent data, Player user, Socket client) Promise~GameInformation | void~
-
+        +changeToLeaderboard(boolean endGame, string gamePin, Socket client)
     }
 
     %% Relations
