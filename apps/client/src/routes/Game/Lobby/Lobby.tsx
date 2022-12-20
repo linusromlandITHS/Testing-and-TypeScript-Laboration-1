@@ -11,9 +11,9 @@ import Button from '$src/components/Button/Button';
 import { GameInformation, OptionItem, Options, Player } from '_packages/shared/src/types';
 import SettingInput from './components/SettingInput/SettingInput';
 import CopyIcon from '$src/assets/icons/copy.svg';
-import style from './Lobby.module.css';
 import PlayerCard from '$src/components/PlayerCard/PlayerCard';
 import { PlayerStatus } from '_packages/shared/src/enums';
+import style from './Lobby.module.css';
 
 export default function Lobby({ game, socket }: { game: GameInformation; socket: Socket }): JSX.Element {
 	const { user } = useAuth0();
@@ -37,33 +37,8 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 		questionCount: 0,
 		isPrivate: false
 	});
-	const [players, setPlayers] = useState<Player[]>([
-		{
-			id: '1',
-			name: 'Player 1',
-			email: 'player1@example.com',
-			status: PlayerStatus.HOST,
-			imageURL: 'https://thispersondoesnotexist.com/image',
-			score: 0
-		},
-		{
-			id: '2',
-			name: 'Player 2',
-			email: 'player2@example.com',
-			status: PlayerStatus.READY,
-			imageURL: 'https://thispersondoesnotexist.com/image',
-			score: 0
-		},
-		{
-			id: '3',
-			name: 'Player 3',
-			email: 'player3@example.com',
-			status: PlayerStatus.NOT_READY,
-			imageURL: 'https://thispersondoesnotexist.com/image',
-			score: 0
-		}
-	]);
-	const [gamePin, setGamePin] = useState<string>('AB1234');
+	const [players, setPlayers] = useState<Player[]>([]);
+	const [gamePin, setGamePin] = useState<string>('');
 	const [host, setHost] = useState<boolean>(false);
 
 	useEffect(() => {
