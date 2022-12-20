@@ -13,7 +13,7 @@ import './main.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
-		<ToastContainer />
+		<ToastContainer pauseOnFocusLoss={false} pauseOnHover={false} />
 		<Auth0Provider
 			domain={AUTH0_DOMAIN}
 			clientId={AUTH0_CLIENT_ID}

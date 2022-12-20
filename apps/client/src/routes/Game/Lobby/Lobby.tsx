@@ -9,7 +9,6 @@ import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { getOptions } from '$src/utils/api';
 import Button from '$src/components/Button/Button';
 import { GameInformation, OptionItem, Options, Player } from '_packages/shared/src/types';
-import Background from '$src/components/Background/Background';
 import SettingInput from './components/SettingInput/SettingInput';
 import CopyIcon from '$src/assets/icons/copy.svg';
 import style from './Lobby.module.css';
@@ -107,167 +106,172 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 	}, [optionValues]);
 
 	return (
-		<Background>
-			<div className={style.content}>
-				<div>
-					<h2 className={style.title}>Match Lobby</h2>
-					<p className={style.gamePin}>
-						Game PIN: <span className={style.gamePinValue}>{gamePin}</span>
-						<button
-							className={style.copyButton}
-							onClick={async (): Promise<void> => {
-								await navigator.clipboard.writeText(gamePin);
-								toast.success('Copied to clipboard');
-							}}
-						>
-							<CopyIcon />
-						</button>
-					</p>
-				</div>
-				<div className={style.mainContent}>
-					<div className={style.settings}>
-						<h3 className={style.subtitle}>Settings</h3>
-						<div className={style.settingsContent}>
-							<SettingInput
-								label="Region"
-								options={options?.regions}
-								value={
-									options?.regions[
-										options?.regions.findIndex((region: OptionItem) => region.value === optionValues.region)
-									]?.value
-								}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, region: value?.value || '' })
-								}
-								edit={host}
-								inputType="select"
-							/>
-							<SettingInput
-								label="Category"
-								options={options?.categories}
-								value={
-									options?.categories[
-										options?.categories.findIndex((category: OptionItem) => category.value === optionValues.category)
-									]?.value
-								}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, category: value?.value || '' })
-								}
-								edit={host}
-								inputType="select"
-							/>
-							<SettingInput
-								label="Tag"
-								options={options?.tags}
-								value={
-									options?.tags[options?.tags.findIndex((tag: OptionItem) => tag.value === optionValues.tag)]?.value
-								}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, tag: value?.value || '' })
-								}
-								edit={host}
-								inputType="select"
-							/>
-							<SettingInput
-								label="Difficulty"
-								options={options?.difficulties}
-								value={
-									options?.difficulties[
-										options?.difficulties.findIndex(
-											(difficulty: OptionItem) => difficulty.value === optionValues.difficulty
-										)
-									]?.value
-								}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, difficulty: value?.value || '' })
-								}
-								edit={host}
-								inputType="select"
-							/>
-							<SettingInput
-								label="Time per question (seconds)"
-								value={optionValues.questionTime.toString()}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, questionTime: Number(value?.value) || 0 })
-								}
-								edit={host}
-								inputType="number"
-							/>
-							<SettingInput
-								label="Number of questions"
-								value={optionValues.questionCount.toString()}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, questionCount: Number(value?.value) || 0 })
-								}
-								edit={host}
-								inputType="number"
-							/>
-							<SettingInput
-								label="Private game"
-								value={optionValues.isPrivate ? 'true' : 'false'}
-								onChange={(value: { value: string; label: string } | undefined): void =>
-									setOptionValues({ ...optionValues, isPrivate: value?.value === 'true' })
-								}
-								edit={host}
-								inputType="checkbox"
-							/>
-						</div>
-					</div>
-					<div className={style.players}>
-						<h3 className={style.subtitle}>Players</h3>
-						{players.map((player: Player) => (
-							<PlayerCard
-								key={player.id}
-								name={player.name}
-								imageURL={player.imageURL}
-								status={player.status}
-								score={player.score}
-								stage={'lobby'}
-							/>
-						))}
-					</div>
-				</div>
-				<div className={style.buttons}>
-					<Button
-						text="Back"
-						onClick={(): void => {
-							navigate('/');
+		<div className={style.content}>
+			<div>
+				<h2 className={style.title}>Match Lobby</h2>
+				<p className={style.gamePin}>
+					Game PIN: <span className={style.gamePinValue}>{gamePin}</span>
+					<button
+						className={style.copyButton}
+						onClick={async (): Promise<void> => {
+							await navigator.clipboard.writeText(gamePin);
+							toast.success('Copied to clipboard');
 						}}
-						secondary
-						small
-					/>
-					{host ? (
-						<Button
-							text="Start Game"
-							onClick={(): void => {
-								console.log('Start Game');
-							}}
-							small
-						/>
-					) : (
-						<Button
-							text={
-								game &&
-								game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
-									? 'Not Ready'
-									: 'Ready'
+					>
+						<CopyIcon />
+					</button>
+				</p>
+			</div>
+			<div className={style.mainContent}>
+				<div className={style.settings}>
+					<h3 className={style.subtitle}>Settings</h3>
+					<div className={style.settingsContent}>
+						<SettingInput
+							label="Region"
+							options={options?.regions}
+							value={
+								options?.regions[
+									options?.regions.findIndex((region: OptionItem) => region.value === optionValues.region)
+								]?.value
 							}
-							onClick={(): void => {
-								if (!game) return;
-								socket.emit('events', {
-									gamePin: game.id,
-									event: 'changePlayerStatus',
-									status:
-										game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
-											? PlayerStatus.NOT_READY
-											: PlayerStatus.READY
-								});
-							}}
-							small
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, region: value?.value || '' })
+							}
+							edit={host}
+							inputType="select"
 						/>
-					)}
+						<SettingInput
+							label="Category"
+							options={options?.categories}
+							value={
+								options?.categories[
+									options?.categories.findIndex((category: OptionItem) => category.value === optionValues.category)
+								]?.value
+							}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, category: value?.value || '' })
+							}
+							edit={host}
+							inputType="select"
+						/>
+						<SettingInput
+							label="Tag"
+							options={options?.tags}
+							value={options?.tags[options?.tags.findIndex((tag: OptionItem) => tag.value === optionValues.tag)]?.value}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, tag: value?.value || '' })
+							}
+							edit={host}
+							inputType="select"
+						/>
+						<SettingInput
+							label="Difficulty"
+							options={options?.difficulties}
+							value={
+								options?.difficulties[
+									options?.difficulties.findIndex(
+										(difficulty: OptionItem) => difficulty.value === optionValues.difficulty
+									)
+								]?.value
+							}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, difficulty: value?.value || '' })
+							}
+							edit={host}
+							inputType="select"
+						/>
+						<SettingInput
+							label="Time per question (seconds)"
+							value={optionValues.questionTime.toString()}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, questionTime: Number(value?.value) || 0 })
+							}
+							edit={host}
+							inputType="number"
+						/>
+						<SettingInput
+							label="Number of questions"
+							value={optionValues.questionCount.toString()}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, questionCount: Number(value?.value) || 0 })
+							}
+							edit={host}
+							inputType="number"
+						/>
+						<SettingInput
+							label="Private game"
+							value={optionValues.isPrivate ? 'true' : 'false'}
+							onChange={(value: { value: string; label: string } | undefined): void =>
+								setOptionValues({ ...optionValues, isPrivate: value?.value === 'true' })
+							}
+							edit={host}
+							inputType="checkbox"
+						/>
+					</div>
+				</div>
+				<div className={style.players}>
+					<h3 className={style.subtitle}>Players</h3>
+					{players.map((player: Player) => (
+						<PlayerCard
+							key={player.id}
+							name={player.name}
+							imageURL={player.imageURL}
+							status={player.status}
+							score={player.score}
+							stage={'lobby'}
+						/>
+					))}
 				</div>
 			</div>
-		</Background>
+			<div className={style.buttons}>
+				<Button
+					text="Back"
+					onClick={(): void => {
+						navigate('/');
+					}}
+					secondary
+					small
+				/>
+				{host ? (
+					<Button
+						text="Start Game"
+						onClick={(): void => {
+							//View toast if not everyone is ready
+							if (players.some((player: Player) => player.status === PlayerStatus.NOT_READY)) {
+								toast.warning('Not everyone is ready!');
+								return;
+							}
+
+							//Start game
+							socket.emit('events', {
+								gamePin: game?.id,
+								event: 'startGame'
+							});
+						}}
+						small
+					/>
+				) : (
+					<Button
+						text={
+							game && game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
+								? 'Not Ready'
+								: 'Ready'
+						}
+						onClick={(): void => {
+							if (!game) return;
+							socket.emit('events', {
+								gamePin: game.id,
+								event: 'changePlayerStatus',
+								status:
+									game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
+										? PlayerStatus.NOT_READY
+										: PlayerStatus.READY
+							});
+						}}
+						small
+					/>
+				)}
+			</div>
+		</div>
 	);
 }

@@ -14,12 +14,16 @@ import { io, Socket } from 'socket.io-client';
 
 // Internal dependencies
 import { joinMatch } from '$src/utils/api';
-import Lobby from './Lobby/Lobby';
 import { API_URL } from '$src/utils/env';
 import { GameInformation } from '_packages/shared/src/types';
 import { GameStatus } from '_packages/shared/src/enums';
 import { HTTPError } from '$src/types';
 import { toast } from 'react-toastify';
+
+// Routes import
+import Lobby from './Lobby/Lobby';
+import Question from './Question/Question';
+import Background from '$src/components/Background/Background';
 
 const socket: Socket = io(API_URL, {
 	extraHeaders: {
@@ -57,6 +61,13 @@ export default function Game(): JSX.Element {
 				initSocket();
 				return navigate(navigation);
 			}
+		} else if (game.status === GameStatus.QUESTION) {
+			const navigation: string = `/game/${gamePin}/question`;
+			if (location.pathname !== navigation) return navigate(navigation);
+		} else if (game.status === GameStatus.LEADERBOARD) {
+			const navigation: string = `/game/${gamePin}/question/results`;
+			if (location.pathname !== navigation || location.pathname !== `/game/${gamePin}/leaderboard`)
+				return navigate(navigation);
 		} else if (game.status === GameStatus.CLOSED) {
 			toast.info('Host has left the game, you will be redirected to the home page.');
 			const navigation: string = '/';
@@ -75,7 +86,11 @@ export default function Game(): JSX.Element {
 
 	return (
 		<Routes>
-			<Route path="/lobby" element={<Lobby game={game as GameInformation} socket={socket} />} />
+			<Route element={<Background />}>
+				<Route path="/lobby" element={<Lobby game={game as GameInformation} socket={socket} />} />
+				<Route path="/question" element={<Question game={game as GameInformation} socket={socket} />} />
+				<Route path="/question/:result" element={<Question game={game as GameInformation} socket={socket} />} />
+			</Route>
 		</Routes>
 	);
 }

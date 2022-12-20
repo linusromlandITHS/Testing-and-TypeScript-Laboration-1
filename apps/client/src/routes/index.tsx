@@ -1,6 +1,6 @@
 // External dependencies
 import { useEffect, useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { IdToken, useAuth0 } from '@auth0/auth0-react';
 
 // Internal dependencies
@@ -45,6 +45,7 @@ export default function routes(): JSX.Element {
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/game/:gamePin/*" element={<Game />} />
+			<Route path="*" element={<Navigate to="/" />} />
 		</Routes>
 	);
 }

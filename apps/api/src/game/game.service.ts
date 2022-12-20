@@ -103,6 +103,8 @@ export class GameService {
 
 		if (!user) return null; // If the user doesn't exist, return null
 
+		console.log(`User ${user.name} left the game`);
+
 		//Remove the user from all the games
 		for (let i: number = 0; i < _games.length; i++) {
 			if (_games[i].players.find((player: Player) => player.id === user.id)) {
@@ -210,6 +212,7 @@ export class GameService {
 
 		function changeToLeaderboard(endGame: boolean = false): void {
 			const updatedGame: GameInformation = _games.find((g: GameInformation) => g.id === data.gamePin);
+			if (!updatedGame) return;
 			updatedGame.status = GameStatus.LEADERBOARD;
 			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
 			updatedGame.activeQuestion = null;
