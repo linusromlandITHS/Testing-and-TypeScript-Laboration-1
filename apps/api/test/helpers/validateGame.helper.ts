@@ -15,7 +15,7 @@ export default function validateGame(result: GameInformation): void {
 
 	expect(result).toHaveProperty('id'); // Check if the game has an ID
 
-	expect(result.id).toMatch(/^[A-Z]{2}-[0-9]{4}$/);
+	expect(result.id).toMatch(/^[A-Z]{2}[0-9]{4}$/);
 
 	expect(result).toHaveProperty('settings'); // Check if the game has settings
 

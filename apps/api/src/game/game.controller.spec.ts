@@ -1,6 +1,5 @@
 // External dependencies
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpStatus } from '@nestjs/common';
 
 // Internal dependencies
 import getAccessToken from '$src/../test/helpers/getAccessToken.helper';

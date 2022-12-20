@@ -35,7 +35,10 @@ describe('GameGateway', () => {
 					authorization: `Bearer ${token}`
 				}
 			},
-			emit: () => true
+			emit: () => true,
+			broadcast: {
+				emit: () => true
+			}
 		} as unknown as Socket;
 	});
 
