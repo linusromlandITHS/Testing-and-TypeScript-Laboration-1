@@ -62,18 +62,16 @@ describe('GameGateway (e2e)', () => {
 				questionTime: 5,
 				region: 'us',
 				category: 'sports',
-				difficulty: 'easy',
-				tag: 'football'
+				difficulty: 'easy'
 			}
 		});
 
-		socket.on(gamePin, (data: GameInformation) => {
+		socket.on(gamePin, (dataString: string) => {
+			const data: GameInformation = JSON.parse(dataString);
 			expect(data).toBeDefined();
-			expect(data).toHaveProperty('settings');
 			expect(data.settings).toHaveProperty('region', 'us');
 			expect(data.settings).toHaveProperty('category', 'sports');
 			expect(data.settings).toHaveProperty('difficulty', 'easy');
-			expect(data.settings).toHaveProperty('tag', 'football');
 			done();
 		});
 	});
@@ -84,7 +82,8 @@ describe('GameGateway (e2e)', () => {
 			event: 'startGame'
 		});
 
-		socket.on(gamePin, (data: GameInformation) => {
+		socket.on(gamePin, (dataString: string) => {
+			const data: GameInformation = JSON.parse(dataString);
 			expect(data).toHaveProperty('status');
 
 			let previousScore: number = 0;
