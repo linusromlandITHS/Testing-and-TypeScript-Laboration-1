@@ -1,7 +1,9 @@
 enum GameStatus {
-	JOINING = 'joining',
+	LOBBY = 'lobby',
 	QUESTION = 'question',
-	LEADERBOARD = 'leaderboard'
+	LEADERBOARD = 'leaderboard',
+	CLOSED = 'closed',
+	FINISHED = 'finished'
 }
 
 export default GameStatus;

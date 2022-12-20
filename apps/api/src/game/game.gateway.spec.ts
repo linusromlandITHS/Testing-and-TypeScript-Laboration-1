@@ -71,7 +71,7 @@ describe('GameGateway', () => {
 		// eslint-disable-next-line quotes
 		expect(game.settings.tag).toBe("1980's");
 		expect(game.players[0].status == PlayerStatus.HOST).toBe(true);
-		expect(game.status == GameStatus.JOINING).toBe(true);
+		expect(game.status == GameStatus.LOBBY).toBe(true);
 	});
 
 	it('should be able to join game', async () => {

@@ -32,7 +32,7 @@ export class GameService {
 
 		const game: GameInformation = {
 			id: generateGameId(_games.map((game: GameInformation) => game.id)), // Generate a unique game ID
-			status: GameStatus.JOINING,
+			status: GameStatus.LOBBY,
 			settings: {
 				isPrivate: true,
 				// Set the default settings
@@ -68,7 +68,7 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		if (game.status != GameStatus.JOINING) return; // If the game isn't in the joining phase, return null
+		if (game.status != GameStatus.LOBBY) return; // If the game isn't in the joining phase, return null
 
 		if (!game.players.find((player: Player) => player.id === user.id) && !game.settings.isPrivate)
 			game.players.push({
@@ -103,13 +103,22 @@ export class GameService {
 
 		if (!user) return null; // If the user doesn't exist, return null
 
-		console.log(user);
-
 		//Remove the user from all the games
 		for (let i: number = 0; i < _games.length; i++) {
 			if (_games[i].players.find((player: Player) => player.id === user.id)) {
-				_games[i].players = _games[i].players.filter((player: Player) => player.id !== user.id);
-				client.broadcast.emit(_games[i].id, _games[i]);
+				//Find index of the player
+				const playerIndex: number = _games[i].players.findIndex((player: Player) => player.id === user.id);
+
+				//If player is the host, remove the game
+				if (_games[i].players[playerIndex].status === PlayerStatus.HOST) {
+					_games[i].status = GameStatus.CLOSED;
+					client.broadcast.emit(_games[i].id, _games[i]);
+					_games.splice(i, 1);
+					i--;
+				} else {
+					_games[i].players.splice(playerIndex, 1);
+					client.broadcast.emit(_games[i].id, _games[i]);
+				}
 			}
 		}
 	}
@@ -119,7 +128,7 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		if (game.status !== GameStatus.JOINING) return null; // If the game isn't in the joining phase, return null
+		if (game.status !== GameStatus.LOBBY) return null; // If the game isn't in the joining phase, return null
 
 		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
 
@@ -132,8 +141,6 @@ export class GameService {
 			game.settings[key] = data.settings[key];
 		}
 
-		console.log(game.settings);
-
 		return game; // Return the game
 	}
 
@@ -142,7 +149,7 @@ export class GameService {
 
 		if (!game) return null; // If the game doesn't exist, return null
 
-		if (game.status !== GameStatus.JOINING) return null; // If the game isn't in the joining phase, return null
+		if (game.status !== GameStatus.LOBBY) return null; // If the game isn't in the joining phase, return null
 
 		const player: Player = game.players.find((player: Player) => player.id === user.id); // Find the player
 

@@ -1,5 +1,14 @@
 // External dependencies
-import { Params, Route, Routes, useParams, useNavigate, NavigateFunction } from 'react-router-dom';
+import {
+	Params,
+	Route,
+	Routes,
+	useParams,
+	useNavigate,
+	NavigateFunction,
+	useLocation,
+	Location
+} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
@@ -10,6 +19,7 @@ import { API_URL } from '$src/utils/env';
 import { GameInformation } from '_packages/shared/src/types';
 import { GameStatus } from '_packages/shared/src/enums';
 import { HTTPError } from '$src/types';
+import { toast } from 'react-toastify';
 
 const socket: Socket = io(API_URL, {
 	extraHeaders: {
@@ -19,24 +29,40 @@ const socket: Socket = io(API_URL, {
 
 export default function Game(): JSX.Element {
 	const navigate: NavigateFunction = useNavigate();
+	const location: Location = useLocation();
 
 	const [game, setGame] = useState<GameInformation | undefined>(undefined);
 
 	//Read GamePin Parameter
 	const { gamePin }: Params = useParams();
 
-	useEffect((): void => {
+	useEffect(() => {
 		(async (): Promise<void> => {
 			if (!gamePin) return;
 			const retrievedGame: GameInformation | HTTPError = await joinMatch(gamePin);
 			if (!retrievedGame || 'statusCode' in retrievedGame) return navigate('/');
 			setGame(retrievedGame as GameInformation);
-			if (retrievedGame.status === GameStatus.JOINING) {
-				initSocket();
-				return navigate(`/game/${gamePin}/lobby`);
-			} else return navigate('/');
 		})();
+
+		return (): void => {
+			socket.off(gamePin);
+		};
 	}, [gamePin]);
+
+	useEffect(() => {
+		if (!game) return;
+		if (game.status === GameStatus.LOBBY) {
+			const navigation: string = `/game/${gamePin}/lobby`;
+			if (location.pathname !== navigation) {
+				initSocket();
+				return navigate(navigation);
+			}
+		} else if (game.status === GameStatus.CLOSED) {
+			toast.info('Host has left the game, you will be redirected to the home page.');
+			const navigation: string = '/';
+			if (location.pathname !== navigation) return navigate(navigation);
+		}
+	}, [game]);
 
 	function initSocket(): void {
 		if (!gamePin) return;
