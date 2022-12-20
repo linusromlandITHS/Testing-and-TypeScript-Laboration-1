@@ -56,7 +56,10 @@ export class GameService {
 
 		_games.push(game); // Add the game to the list of games
 
-		return game; // Return the game
+		return {
+			...game,
+			timeout: undefined
+		}; // Return the game
 	}
 
 	async joinGame(token: string, gameId: string, user?: Player): Promise<GameInformation> {
@@ -83,7 +86,10 @@ export class GameService {
 		)
 			return;
 
-		return game; // Return the game
+		return {
+			...game,
+			timeout: undefined
+		}; // Return the game
 	}
 
 	async gameExists(token: string, gameId: string): Promise<boolean> {
@@ -143,7 +149,10 @@ export class GameService {
 			game.settings[key] = data.settings[key];
 		}
 
-		return game; // Return the game
+		return {
+			...game,
+			timeout: undefined
+		}; // Return the game
 	}
 
 	async changePlayerStatus(data: WebSocketEvent, user: Player): Promise<GameInformation> {
@@ -162,7 +171,10 @@ export class GameService {
 		//Update the player's status
 		game.players.find((player: Player) => player.id === user.id).status = data.status;
 
-		return game; // Return the game
+		return {
+			...game,
+			timeout: undefined
+		}; // Return the game
 	}
 
 	async startGame(data: WebSocketEvent, user: Player, client: Socket): Promise<GameInformation | void> {
@@ -210,58 +222,16 @@ export class GameService {
 
 		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
 
-		function changeToLeaderboard(endGame: boolean = false): void {
-			const updatedGame: GameInformation = _games.find((g: GameInformation) => g.id === data.gamePin);
-			if (!updatedGame) return;
-			updatedGame.status = GameStatus.LEADERBOARD;
-			updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
-			updatedGame.activeQuestion = null;
-
-			//Calculate the scores
-			for (const player of updatedGame.players) {
-				let score: number = 0;
-				let streak: number = 0;
-				//Loop through the keys of the answers
-				for (const key in updatedGame.answers) {
-					//If the key is the player's id and the answer is correct, add 1 to the correct answer
-					if (!updatedGame.answers[key][player.id].correct) {
-						streak = 0;
-						continue;
-					}
-					streak++;
-
-					const time: number = updatedGame.answers[key][player.id].time / QUESTION_MAX_POSSIBLE_POINTS;
-					//Calculate after how many seconds the player answered the question
-					const responseTime: number = updatedGame.settings.questionTime - time;
-
-					score += calculateScore(responseTime, updatedGame.settings.questionTime, streak);
-				}
-				player.score = score;
-			}
-
-			//Sort the players by score
-			updatedGame.players.sort((a: Player, b: Player) => b.score - a.score);
-
-			const gameData: any = {
-				...updatedGame,
-				questions: []
-			};
-
-			client.emit(updatedGame.id, gameData);
-
-			if (endGame) {
-				//Remove the game from the list of games
-				_games.splice(_games.indexOf(updatedGame), 1);
-				return;
-			}
-		}
-
 		//If there are no more questions, return the game with the question as the current question and empty question array
-		if (game.previousQuestions.length >= game.settings.questionCount) return changeToLeaderboard(true);
+		if (game.previousQuestions.length >= game.settings.questionCount)
+			return changeToLeaderboard(true, data.gamePin, client);
 
 		//Set a timeout to show the correct answer and leaderboard
 		game.status = GameStatus.QUESTION;
-		setTimeout(changeToLeaderboard, game.settings.questionTime * 1000 + QUESTION_INTRO_TIME);
+		game.timeout = setTimeout(
+			() => changeToLeaderboard(false, data.gamePin, client),
+			game.settings.questionTime * 1000 + QUESTION_INTRO_TIME
+		);
 
 		//Return game with the question as the current question and empty question array
 		const question: Question = game.questions[game.previousQuestions.length];
@@ -273,11 +243,12 @@ export class GameService {
 
 		return {
 			...game,
-			questions: []
+			questions: [],
+			timeout: undefined
 		};
 	}
 
-	async answerQuestion(data: WebSocketEvent, user: Player): Promise<void> {
+	async answerQuestion(data: WebSocketEvent, user: Player, client: Socket): Promise<void> {
 		const game: GameInformation = _games.find((game: GameInformation) => game.id === data.gamePin); // Find the game
 
 		if (!game) return null; // If the game doesn't exist, return null
@@ -308,5 +279,58 @@ export class GameService {
 			correct: data.answer === question.correctAnswer,
 			time: Date.now() - game.activeQuestion.sentAt - QUESTION_INTRO_TIME
 		};
+
+		//If all players have answered the question, show the correct answer
+		if (Object.keys(game.answers[question.questionId]).length === game.players.length)
+			changeToLeaderboard(false, data.gamePin, client);
+	}
+}
+
+function changeToLeaderboard(endGame: boolean = false, gamePin: string, client: Socket): void {
+	const updatedGame: GameInformation = _games.find((g: GameInformation) => g.id === gamePin);
+	if (!updatedGame) return;
+	updatedGame.status = GameStatus.LEADERBOARD;
+	updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
+	updatedGame.activeQuestion = null;
+
+	//Calculate the scores
+	for (const player of updatedGame.players) {
+		let score: number = 0;
+		let streak: number = 0;
+		//Loop through the keys of the answers
+		for (const key in updatedGame.answers) {
+			//If the key is the player's id and the answer is correct, add 1 to the correct answer
+			if (!updatedGame.answers[key][player.id].correct) {
+				streak = 0;
+				continue;
+			}
+			streak++;
+
+			const time: number = updatedGame.answers[key][player.id].time / QUESTION_MAX_POSSIBLE_POINTS;
+			//Calculate after how many seconds the player answered the question
+			const responseTime: number = updatedGame.settings.questionTime - time;
+
+			score += calculateScore(responseTime, updatedGame.settings.questionTime, streak);
+		}
+		player.score = score;
+	}
+
+	//Sort the players by score
+	updatedGame.players.sort((a: Player, b: Player) => b.score - a.score);
+
+	const gameData: any = {
+		...updatedGame,
+		questions: []
+	};
+
+	client.emit(updatedGame.id, {
+		...gameData,
+		timeout: undefined
+	});
+
+	if (endGame) {
+		//Remove the game from the list of games
+		_games.splice(_games.indexOf(updatedGame), 1);
+		return;
 	}
 }

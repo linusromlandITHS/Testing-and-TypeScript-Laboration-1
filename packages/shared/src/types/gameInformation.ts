@@ -50,6 +50,7 @@ interface GameInformation {
 	activeQuestion?: Question;
 	answers: Answer;
 	players: Player[];
+	timeout?: NodeJS.Timeout;
 }
 
 export type { Settings, Question, PlayerAnswer, Answer, Player, GameInformation };
