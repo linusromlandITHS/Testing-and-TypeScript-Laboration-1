@@ -17,7 +17,7 @@ import {
 	DEFAULT_QUESTION_REGION,
 	DEFAULT_QUESTION_DIFFICULTY,
 	DEFAULT_QUESTION_CATEGORY,
-	QUESTION_MAX_POSSIBLE_POINTS
+	QUESTION_MAX_PLAYERS
 } from '$src/utils/env';
 import calculateScore from '$src/utils/calculateScore';
 
@@ -69,6 +69,8 @@ export class GameService {
 		if (!game) return null; // If the game doesn't exist, return null
 
 		if (game.status != GameStatus.LOBBY) return; // If the game isn't in the joining phase, return null
+
+		if (game.players.length >= QUESTION_MAX_PLAYERS) return; // If the game is full, return null
 
 		if (!game.players.find((player: Player) => player.id === user.id) && !game.settings.isPrivate)
 			game.players.push({
