@@ -73,7 +73,6 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 
 	useEffect(() => {
 		if (game) {
-			console.log(game);
 			setGamePin(game.id);
 			setPlayers(game.players);
 			//Check if any of the settings are different from the current settings
@@ -100,7 +99,6 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 	}, [game]);
 
 	useEffect(() => {
-		console.log(optionValues);
 		socket.emit('events', {
 			event: 'changeSettings',
 			gamePin: gamePin,
