@@ -56,4 +56,17 @@ describe('SettingInput', (): void => {
 
 		expect(getAllByRole('checkbox')).toHaveLength(1);
 	});
+
+	it('should throw an error if the label and inputType are not provided', (): void => {
+		expect((): void => {
+			render(
+				// @ts-expect-error - Testing error handling
+				<SettingInput
+					onChange={(): void => {
+						return undefined;
+					}}
+				/>
+			);
+		}).toThrow();
+	});
 });

@@ -18,6 +18,8 @@ export default function SettingInput({
 	edit: boolean;
 	inputType: string;
 }): JSX.Element {
+	if (!label || !inputType) throw new Error('SettingInput: label and inputType are required');
+
 	if (edit && inputType === 'select' && options)
 		return (
 			<div className={style.setting}>

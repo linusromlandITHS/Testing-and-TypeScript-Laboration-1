@@ -42,4 +42,11 @@ describe('Answer', (): void => {
 
 		expect(onClick).toHaveBeenCalled();
 	});
+
+	it('should throw an error if the answer and onClick are not provided', (): void => {
+		expect(() => {
+			// @ts-expect-error - Testing error handling
+			render(<Answer />);
+		}).toThrow();
+	});
 });

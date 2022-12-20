@@ -7,9 +7,11 @@ export default function Answer({
 	onClick
 }: {
 	answer: string;
-	answered: string | undefined;
+	answered?: string | undefined;
 	onClick: () => void;
 }): JSX.Element {
+	if (!answer || !onClick) throw new Error('Answer: answer and onClick are required');
+
 	return (
 		<button className={`${style.answer} ${style[answered || '']}`} disabled={answered !== undefined} onClick={onClick}>
 			{answer}
