@@ -6,17 +6,40 @@ import Button from './Button';
 
 describe('Button', () => {
 	it('should render the text prop', () => {
-		const { getByText } = render(<Button text="Click me" onClick={(): void => {}} />);
+		const { getByText } = render(
+			<Button
+				text="Click me"
+				onClick={(): void => {
+					return undefined;
+				}}
+			/>
+		);
 		expect(getByText('Click me')).toBeInTheDocument();
 	});
 
 	it('should set the correct className when secondary prop is true', () => {
-		const { container } = render(<Button text="Click me" onClick={(): void => {}} secondary />);
+		const { container } = render(
+			<Button
+				text="Click me"
+				onClick={(): void => {
+					return undefined;
+				}}
+				secondary
+			/>
+		);
 		expect(container.firstChild).toHaveClass('secondary');
 	});
 
 	it('should set the correct className when small prop is true', () => {
-		const { container } = render(<Button text="Click me" onClick={(): void => {}} small />);
+		const { container } = render(
+			<Button
+				text="Click me"
+				onClick={(): void => {
+					return undefined;
+				}}
+				small
+			/>
+		);
 		expect(container.firstChild).toHaveClass('small');
 	});
 
@@ -42,8 +65,14 @@ describe('Button', () => {
 
 	it('should throw an error when text prop is missing', () => {
 		expect(() => {
-			// @ts-expect-error - We are testing the error case
-			render(<Button onClick={() => {}} />);
+			render(
+				// @ts-expect-error - We are testing the error case
+				<Button
+					onClick={(): void => {
+						return undefined;
+					}}
+				/>
+			);
 		}).toThrowError('Button component is missing a required prop');
 	});
 
