@@ -19,11 +19,12 @@ import { GameInformation } from '_packages/shared/src/types';
 import { GameStatus } from '_packages/shared/src/enums';
 import { HTTPError } from '$src/types';
 import { toast } from 'react-toastify';
+import Background from '$src/components/Background/Background';
 
 // Routes import
 import Lobby from './Lobby/Lobby';
 import Question from './Question/Question';
-import Background from '$src/components/Background/Background';
+import Leaderboard from './Leaderboard/Leaderboard';
 
 const socket: Socket = io(API_URL, {
 	extraHeaders: {
@@ -79,6 +80,7 @@ export default function Game(): JSX.Element {
 		if (!gamePin) return;
 		socket.on(gamePin, (data: string): void => {
 			setGame(JSON.parse(data));
+			console.log(JSON.parse(data));
 		});
 
 		socket.emit('events', { event: 'joinGame', gamePin });
@@ -90,6 +92,7 @@ export default function Game(): JSX.Element {
 				<Route path="/lobby" element={<Lobby game={game as GameInformation} socket={socket} />} />
 				<Route path="/question" element={<Question game={game as GameInformation} socket={socket} />} />
 				<Route path="/question/:result" element={<Question game={game as GameInformation} socket={socket} />} />
+				<Route path="/leaderboard" element={<Leaderboard game={game as GameInformation} socket={socket} />} />
 			</Route>
 		</Routes>
 	);

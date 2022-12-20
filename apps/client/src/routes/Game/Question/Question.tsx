@@ -79,7 +79,16 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 		setLoading(true);
 
 		const interval: NodeJS.Timer = setInterval((): undefined => {
-			const result: number = (dayjs().diff((game.activeQuestion?.sentAt || 0) + resultView, 'ms') / resultView) * 100;
+			const result: number =
+				(dayjs().diff(
+					(game.activeQuestion?.sentAt || 0) +
+						(game.settings.questionTime || 0) +
+						(QUESTION_INTRO_TIME || 0) +
+						resultView,
+					'ms'
+				) /
+					resultView) *
+				100;
 
 			if (result > 100) {
 				setLoadingTimer(100);

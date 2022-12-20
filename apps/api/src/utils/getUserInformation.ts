@@ -4,6 +4,9 @@ import { decode, Jwt } from 'jsonwebtoken';
 
 export default function getUserInformation(token: string): Player {
 	const decoded: Jwt = decode(token, { complete: true });
+
+	if (!decoded) return null;
+
 	return {
 		id: decoded.payload['sub'] as string,
 		name: decoded.payload['name'],

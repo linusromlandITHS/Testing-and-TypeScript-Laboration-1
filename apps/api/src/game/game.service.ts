@@ -114,12 +114,24 @@ export class GameService {
 				//If player is the host, remove the game
 				if (_games[i].players[playerIndex].status === PlayerStatus.HOST) {
 					_games[i].status = GameStatus.CLOSED;
-					client.broadcast.emit(_games[i].id, _games[i]);
+
+					const gameData: string = JSON.stringify({
+						..._games[i],
+						timeout: undefined,
+						questions: []
+					});
+
+					client.broadcast.emit(_games[i].id, gameData);
 					_games.splice(i, 1);
 					i--;
 				} else {
 					_games[i].players.splice(playerIndex, 1);
-					client.broadcast.emit(_games[i].id, _games[i]);
+					const gameData: string = JSON.stringify({
+						..._games[i],
+						timeout: undefined,
+						questions: []
+					});
+					client.broadcast.emit(_games[i].id, gameData);
 				}
 			}
 		}
@@ -273,6 +285,7 @@ export class GameService {
 function changeToLeaderboard(endGame: boolean = false, gamePin: string, client: Socket): void {
 	const updatedGame: GameInformation = _games.find((g: GameInformation) => g.id === gamePin);
 	if (!updatedGame) return;
+	if (updatedGame.timeout) clearTimeout(updatedGame.timeout);
 	updatedGame.status = GameStatus.LEADERBOARD;
 	updatedGame.previousQuestions.push(updatedGame.questions[updatedGame.previousQuestions.length]);
 	updatedGame.activeQuestion = null;
@@ -290,9 +303,7 @@ function changeToLeaderboard(endGame: boolean = false, gamePin: string, client: 
 			}
 			streak++;
 
-			const time: number = updatedGame.answers[key][player.id].time / QUESTION_MAX_POSSIBLE_POINTS;
-			//Calculate after how many seconds the player answered the question
-			const responseTime: number = updatedGame.settings.questionTime - time;
+			const responseTime: number = updatedGame.answers[key][player.id].time / 1000;
 
 			score += calculateScore(responseTime, updatedGame.settings.questionTime, streak);
 		}

@@ -36,7 +36,6 @@ export class GameGateway {
 
 			//Get user information
 			const userInformation: Player = getUserInformation(token);
-			console.log(userInformation.id);
 			console.log(`User ${userInformation.name} sent event ${data.event} to game ${data.gamePin}`);
 
 			if (data.event in this.events) {
