@@ -45,11 +45,22 @@ export class GameGateway {
 				if (!gameInformation) return;
 
 				console.log(`Game ${data.gamePin} sent event ${data.event} to user ${userInformation.name}`);
-				//Emit to all clients
-				client.emit(data.gamePin, gameInformation);
-				client.broadcast.emit(data.gamePin, gameInformation);
 
-				return gameInformation;
+				const socketData: string = JSON.stringify({
+					...gameInformation,
+					timeout: undefined,
+					questions: []
+				});
+
+				//Emit to all clients
+				client.emit(data.gamePin, socketData);
+				client.broadcast.emit(data.gamePin, socketData);
+
+				return {
+					...gameInformation,
+					timeout: undefined,
+					questions: []
+				};
 			}
 		} catch (error) {
 			console.log('Error occured in src/game/game.gateway.ts:handleMessage()');

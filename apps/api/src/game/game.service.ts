@@ -1,5 +1,5 @@
 // External dependencies
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { Socket } from 'socket.io';
 
@@ -56,10 +56,7 @@ export class GameService {
 
 		_games.push(game); // Add the game to the list of games
 
-		return {
-			...game,
-			timeout: undefined
-		}; // Return the game
+		return game; // Return the game
 	}
 
 	async joinGame(token: string, gameId: string, user?: Player): Promise<GameInformation> {
@@ -86,10 +83,7 @@ export class GameService {
 		)
 			return;
 
-		return {
-			...game,
-			timeout: undefined
-		}; // Return the game
+		return game; // Return the game
 	}
 
 	async gameExists(token: string, gameId: string): Promise<boolean> {
@@ -149,10 +143,7 @@ export class GameService {
 			game.settings[key] = data.settings[key];
 		}
 
-		return {
-			...game,
-			timeout: undefined
-		}; // Return the game
+		return game; // Return the game
 	}
 
 	async changePlayerStatus(data: WebSocketEvent, user: Player): Promise<GameInformation> {
@@ -171,10 +162,7 @@ export class GameService {
 		//Update the player's status
 		game.players.find((player: Player) => player.id === user.id).status = data.status;
 
-		return {
-			...game,
-			timeout: undefined
-		}; // Return the game
+		return game; // Return the game
 	}
 
 	async startGame(data: WebSocketEvent, user: Player, client: Socket): Promise<GameInformation | void> {
@@ -241,11 +229,7 @@ export class GameService {
 			sentAt: Date.now()
 		};
 
-		return {
-			...game,
-			questions: [],
-			timeout: undefined
-		};
+		return game;
 	}
 
 	async answerQuestion(data: WebSocketEvent, user: Player, client: Socket): Promise<void> {
@@ -318,15 +302,14 @@ function changeToLeaderboard(endGame: boolean = false, gamePin: string, client: 
 	//Sort the players by score
 	updatedGame.players.sort((a: Player, b: Player) => b.score - a.score);
 
-	const gameData: any = {
+	const socketData: string = JSON.stringify({
 		...updatedGame,
+		timeout: undefined,
 		questions: []
-	};
-
-	client.emit(updatedGame.id, {
-		...gameData,
-		timeout: undefined
 	});
+
+	client.emit(updatedGame.id, socketData);
+	client.broadcast.emit(updatedGame.id, socketData);
 
 	if (endGame) {
 		//Remove the game from the list of games
