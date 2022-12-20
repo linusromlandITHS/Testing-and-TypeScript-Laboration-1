@@ -4,13 +4,15 @@ import { render } from '@testing-library/react';
 // Internal dependencies
 import Background from './Background';
 
-describe('SelectInput', () => {
-	it('should render correctly', () => {
-		const { baseElement } = render(
-			<Background>
-				<p>Hello World!</p>
-			</Background>
-		);
-		expect(baseElement).toBeTruthy();
+describe('Background component', () => {
+	test('renders correctly with default props', () => {
+		const { container } = render(<Background />);
+
+		// Check that the correct class names are set
+		expect(container.firstChild).toHaveClass('background');
+
+		// Check that the svg element is rendered correctly
+		expect(container.querySelector('svg')).toBeInTheDocument();
+		expect(container.querySelector('path')).toBeInTheDocument();
 	});
 });

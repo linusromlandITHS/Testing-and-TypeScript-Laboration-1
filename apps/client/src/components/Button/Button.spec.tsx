@@ -1,100 +1,56 @@
 // External Dependencies
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 
 // Internal Dependencies
 import Button from './Button';
 
 describe('Button', () => {
-	it('should render successfully', () => {
-		const { baseElement } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return true;
-				}}
-			/>
-		);
-		expect(baseElement).toBeTruthy();
+	it('should render the text prop', () => {
+		const { getByText } = render(<Button text="Click me" onClick={(): void => {}} />);
+		expect(getByText('Click me')).toBeInTheDocument();
 	});
 
-	it('should render with the correct text', () => {
-		const { getByText } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return true;
-				}}
-			/>
-		);
-		expect(getByText('Test')).toBeTruthy();
+	it('should set the correct className when secondary prop is true', () => {
+		const { container } = render(<Button text="Click me" onClick={(): void => {}} secondary />);
+		expect(container.firstChild).toHaveClass('secondary');
 	});
 
-	it('should call the onClick function when clicked', () => {
+	it('should set the correct className when small prop is true', () => {
+		const { container } = render(<Button text="Click me" onClick={(): void => {}} small />);
+		expect(container.firstChild).toHaveClass('small');
+	});
+
+	it('should not call the onClick prop when loading prop is true', () => {
 		const onClick: jest.Mock = jest.fn();
-		const { getByText } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return onClick();
-				}}
-			/>
-		);
-		getByText('Test').click();
-		expect(onClick).toHaveBeenCalled();
-	});
-
-	it('should not call the onClick function when clicked if it is loading', () => {
-		const onClick: jest.Mock = jest.fn();
-		const { baseElement } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return onClick();
-				}}
-				loading
-			/>
-		);
-		baseElement.querySelector('button')?.click();
+		const { container } = render(<Button text="Click me" onClick={onClick} loading />);
+		if (!container.firstChild) {
+			throw new Error('Button element not found');
+		}
+		fireEvent.click(container.firstChild);
 		expect(onClick).not.toHaveBeenCalled();
 	});
 
-	it('should render the secondary variant', () => {
-		const { baseElement } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return true;
-				}}
-				secondary
-			/>
-		);
-
-		expect(baseElement.querySelector('.secondary')).toBeTruthy();
+	it('should call the onClick prop when clicked', () => {
+		const onClick: jest.Mock = jest.fn();
+		const { container } = render(<Button text="Click me" onClick={onClick} />);
+		if (!container.firstChild) {
+			throw new Error('Button element not found');
+		}
+		fireEvent.click(container.firstChild);
+		expect(onClick).toHaveBeenCalled();
 	});
 
-	it('should render the loading variant', () => {
-		const { baseElement } = render(
-			<Button
-				text="Test"
-				onClick={(): boolean => {
-					return true;
-				}}
-				loading
-			/>
-		);
-
-		expect(baseElement.querySelector('.spinner')).toBeTruthy();
+	it('should throw an error when text prop is missing', () => {
+		expect(() => {
+			// @ts-expect-error - We are testing the error case
+			render(<Button onClick={() => {}} />);
+		}).toThrowError('Button component is missing a required prop');
 	});
 
-	it('should throw an error if the text prop is not provided', () => {
-		// @ts-expect-error - This is expected to throw an error
-		expect(() => render(<Button onClick={(): boolean => true} />)).toThrowError(
-			'Button component is missing a required prop'
-		);
-	});
-
-	it('should throw an error if the onClick prop is not provided', () => {
-		// @ts-expect-error - This is expected to throw an error
-		expect(() => render(<Button text="Test" />)).toThrowError('Button component is missing a required prop');
+	it('should throw an error when onClick prop is missing', () => {
+		expect(() => {
+			// @ts-expect-error - We are testing the error case
+			render(<Button text="Click me" />);
+		}).toThrowError('Button component is missing a required prop');
 	});
 });
