@@ -1,5 +1,6 @@
 // External Dependencies
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { Logger } from '@nestjs/common';
 import { Socket } from 'socket.io';
 
 // Internal Dependencies
@@ -11,6 +12,7 @@ import validateWebSocketEvent from '$src/utils/validateWebSocketEvent';
 @WebSocketGateway({ cors: true })
 export class GameGateway {
 	constructor(private readonly gameService: GameService) {}
+	private readonly logger = new Logger(GameGateway.name);
 
 	private readonly events = {
 		joinGame: async (data: WebSocketEvent, userInformation: Player): Promise<GameInformation> =>
@@ -26,24 +28,23 @@ export class GameGateway {
 	async handleMessage(client: Socket, data: WebSocketEvent): Promise<GameInformation | void> {
 		try {
 			//If empty data, return
-			if (!data) return console.log('Empty payload');
+			if (!data) return this.logger.error('Empty payload');
 
 			//Validate data
-			if (!validateWebSocketEvent(data)) return console.log('Invalid payload');
+			if (!validateWebSocketEvent(data)) return this.logger.error('Invalid payload');
 
 			//Read WS Headers
 			const token: string = client.handshake.headers['authorization']?.split(' ')[1];
 
 			//Get user information
 			const userInformation: Player = getUserInformation(token);
-			console.log(`User ${userInformation.name} sent event ${data.event} to game ${data.gamePin}`);
 
 			if (data.event in this.events) {
 				const gameInformation: GameInformation | void = await this.events[data.event](data, userInformation, client);
 
 				if (!gameInformation) return;
 
-				console.log(`Game ${data.gamePin} sent event ${data.event} to user ${userInformation.name}`);
+				this.logger.log(`Game ${data.gamePin} sent event ${data.event} to user ${userInformation.name}`);
 
 				const socketData: string = JSON.stringify({
 					...gameInformation,
@@ -62,8 +63,8 @@ export class GameGateway {
 				};
 			}
 		} catch (error) {
-			console.log('Error occured in src/game/game.gateway.ts:handleMessage()');
-			console.log('Error: ', error);
+			this.logger.error('Error occured in src/game/game.gateway.ts:handleMessage()');
+			this.logger.error('Error: ', error);
 		}
 	}
 

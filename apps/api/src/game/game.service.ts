@@ -1,5 +1,5 @@
 // External dependencies
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { Socket } from 'socket.io';
 
@@ -25,6 +25,8 @@ const _games: GameInformation[] = [];
 
 @Injectable()
 export class GameService {
+	private readonly logger = new Logger(GameService.name);
+
 	async createGame(token: string): Promise<GameInformation> {
 		const user: Player = getUserInformation(token); // Get the user's information from the auth server
 
@@ -105,7 +107,7 @@ export class GameService {
 
 		if (!user) return null; // If the user doesn't exist, return null
 
-		console.log(`User ${user.name} left the game`);
+		this.logger.log(`User ${user.name} left the game`);
 
 		//Remove the user from all the games
 		for (let i: number = 0; i < _games.length; i++) {

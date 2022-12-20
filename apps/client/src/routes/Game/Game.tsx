@@ -80,7 +80,6 @@ export default function Game(): JSX.Element {
 		if (!gamePin) return;
 		socket.on(gamePin, (data: string): void => {
 			setGame(JSON.parse(data));
-			console.log(JSON.parse(data));
 		});
 
 		socket.emit('events', { event: 'joinGame', gamePin });
