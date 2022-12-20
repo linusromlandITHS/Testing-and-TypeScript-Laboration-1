@@ -6,8 +6,7 @@
 2. [Built with](#built-with-%EF%B8%8F)
 3. [Getting started](#getting-started-)
    1. [Prerequisites](#prerequisites-)
-   2. [Manually](#manually-%EF%B8%8F)
-   3. [Docker](#docker-)
+   2. [Setup](#setup-%EF%B8%8F)
 4. [Documentation](#documentation-)
    1. [Figma](#figma)
    2. [UML Sequence Diagram](#uml-sequence-diagram)
@@ -34,19 +33,13 @@ This guide will help you get the project up and running on your local machine, e
 
 ### Prerequisites 📋
 
-If you want to run the project with docker you need to have the following installed:
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-
-If you want to run the project without docker you need to have the following installed:
-
 - [Node.js](https://nodejs.org/en/download/)
 
 You need to setup `Auth0` for the project before running it, a complete guide can be found [here](docs/auth0.md).
+
 You also need to setup the `Environment Variables` for the project before running it, a complete guide can be found [here](docs/environmentVariables.md).
 
-### Manually 🛠️
+### Setup 🛠️
 
 1. Clone the repo
 
@@ -72,27 +65,7 @@ npm install
 npm run dev
 ```
 
-### Docker 🐳
-
-1. Clone the repo
-
-```sh
-git clone https://github.com/linusromlandITHS/linus-romland-testing-typescript-quiz-app.git
-```
-
-2. Navigate to the repository
-
-```sh
-cd linus-romland-testing-typescript-quiz-app
-```
-
-3. Start the project
-
-```sh
-docker-compose up
-```
-
-The frontend will be available at [http://127.0.0.1:5173](http://127.0.0.1:5173) and the backend at [http://127.0.0.1:3000](http://127.0.0.1:3000).
+The frontend will be available at [http://127.0.0.1:3000](http://127.0.0.1:3000) and the backend at [http://127.0.0.1:3001](http://127.0.0.1:3001).
 
 ## Documentation 📖
 
