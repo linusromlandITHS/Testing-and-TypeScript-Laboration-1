@@ -188,10 +188,12 @@ export class GameService {
 
 		if (player.status !== PlayerStatus.HOST) return null; //Check if the player is not the host
 
+		let triviaURL: string = `${TRIVIA_API_URL}/questions?limit=${game.settings.questionCount}&region=${game.settings.region}&categories=${game.settings.category}&difficulty=${game.settings.difficulty}`;
+
+		if (game.settings.tag) triviaURL += `&tags=${game.settings.tag}`;
+
 		//Get the questions from the trivia API
-		const response: AxiosResponse = await axios.get(
-			`${TRIVIA_API_URL}/questions?amount=${game.settings.questionCount}&region=${game.settings.region}&category=${game.settings.category}&difficulty=${game.settings.difficulty}&tag=${game.settings.tag}`
-		);
+		const response: AxiosResponse = await axios.get(triviaURL);
 
 		if (response.status !== 200) return null; // If the response isn't 200, return null
 
