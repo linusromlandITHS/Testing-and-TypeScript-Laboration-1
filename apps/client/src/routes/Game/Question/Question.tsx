@@ -123,7 +123,8 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 							onClick={(): void => {
 								if (answered) return;
 								setAnswered(index);
-								socket.emit('answerQuestion', {
+								socket.emit('events', {
+									event: 'answerQuestion',
 									gamePin: game.id,
 									questionId: activeQuestion?.questionId,
 									answer: answer
