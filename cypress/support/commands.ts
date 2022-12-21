@@ -4,7 +4,7 @@
 import { QUESTION_INTRO_TIME } from '../../packages/shared/src/constants';
 
 // Auth0 Authentication (source https://docs.cypress.io/guides/end-to-end-testing/auth0-authentication)
-function loginViaAuth0Ui(username: string, password: string) {
+function loginToAuth0(username: string, password: string) {
 	// App landing page with auth0 popup.
 	cy.visit(Cypress.env('APP_URL'));
 
@@ -28,7 +28,7 @@ Cypress.Commands.add('loginToAuth0', (username: string, password: string) => {
 	});
 	log.snapshot('before');
 
-	loginViaAuth0Ui(username, password);
+	loginToAuth0(username, password);
 
 	log.snapshot('after');
 	log.end();

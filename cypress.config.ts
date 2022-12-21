@@ -5,8 +5,6 @@ config();
 // External dependencies
 import { defineConfig } from 'cypress';
 import cucumber from 'cypress-cucumber-preprocessor';
-import fs from 'fs';
-import _ from 'lodash';
 
 export default defineConfig({
 	env: {
@@ -25,27 +23,6 @@ export default defineConfig({
 					typescript: require.resolve('typescript')
 				})
 			);
-
-			on('after:spec', (_spec, results) => {
-				if (results && results.video) {
-					// Do we have failures for any retry attempts?
-					const failures = _.some(results.tests, (test: { attempts: any }) => {
-						return _.some(test.attempts, { state: 'failed' });
-					});
-					if (!failures) {
-						// delete the video if the spec passed and no tests retried
-						fs.unlinkSync(results.video);
-					}
-				}
-			});
-
-			on('task', {
-				log(message) {
-					console.log(message);
-
-					return null;
-				}
-			});
 		}
 	}
 });
