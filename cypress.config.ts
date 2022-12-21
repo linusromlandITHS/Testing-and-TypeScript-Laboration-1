@@ -15,7 +15,7 @@ export default defineConfig({
 	},
 	trashAssetsBeforeRuns: false,
 	e2e: {
-		specPattern: ['**/integration/**/*.ts', '**/e2e/*'],
+		specPattern: ['**/integration/**/*.ts', '**/e2e/**/*.ts'],
 		setupNodeEvents(on) {
 			on(
 				'file:preprocessor',
