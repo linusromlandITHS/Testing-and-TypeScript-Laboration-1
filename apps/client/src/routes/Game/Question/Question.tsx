@@ -128,8 +128,8 @@ export default function Question({ game, socket }: { game: GameInformation; sock
 										? 'correct'
 										: 'incorrect'
 									: answered === index
-										? 'answered'
-										: undefined
+									? 'answered'
+									: undefined
 							}
 							onClick={(): void => {
 								if (answered) return;

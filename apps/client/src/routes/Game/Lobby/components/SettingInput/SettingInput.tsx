@@ -76,10 +76,10 @@ export default function SettingInput({
 				{options
 					? options.find((option: { value: string; label: string }): boolean => option.value === value)?.label
 					: value === 'true'
-						? 'Yes'
-						: value === 'false'
-							? 'No'
-							: value}
+					? 'Yes'
+					: value === 'false'
+					? 'No'
+					: value}
 			</span>
 		</p>
 	);
