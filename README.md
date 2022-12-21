@@ -33,7 +33,7 @@ This project is a simple quiz-app where users can play quizes in both single & m
 
 ## Getting Started 🚀
 
-This guide will help you get the project up and running on your local machine, either using Docker or manually.
+This guide will help you get the project up and running on your local machine.
 
 ### Prerequisites 📋
 
