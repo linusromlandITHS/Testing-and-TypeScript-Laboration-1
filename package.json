@@ -15,12 +15,17 @@
 		"cy:run": "cypress run"
 	},
 	"devDependencies": {
+		"@types/cypress-cucumber-preprocessor": "^4.0.1",
+		"@types/lodash": "^4.14.191",
 		"cypress": "^12.2.0",
+		"cypress-cucumber-preprocessor": "^4.3.1",
 		"eslint": "^8.29.0",
 		"eslint-config-custom": "*",
 		"prettier": "latest",
 		"ts-node": "^10.9.1",
+		"tsify": "^5.0.4",
 		"turbo": "latest",
+		"typescript": "^4.9.4",
 		"wait-on": "^7.0.1"
 	},
 	"engines": {
