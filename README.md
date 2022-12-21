@@ -79,12 +79,13 @@ I have written both unit tests and end-to-end tests for this project. The unit t
 
 To run all tests, you need to have installed and made sure the project can be started. See [Setup](#setup-%EF%B8%8F) for more information. Also make sure that you have set ut Auth0 with a test account and have the environment variables set up. See [Prerequisites](#prerequisites-) for more information.
 
+**Note:** The tests could fail once in a while because of the connection to Auth0. Restarting the test should fix it.
+
+
 ### Unit tests
 
 I have written unit tests for the api and the client. The unit tests for the api are written in `Jest` and the unit tests for the client are written in `React Testing Library`.
 I have tested most of the functions and components. And also tested for invalid inputs, null values and so on. Some are tested with snapshots, some are tested with mock functions and some are tested with just rendering the component and checking if it renders correctly.
-
-**Note:** The tests could fail once in a while because of the connection to Auth0. Restarting the test should fix it.
 
 Some example of this is:
 
