@@ -10,6 +10,8 @@ describe('Prueba game', () => {
 		//Change number of questions to 2
 		cy.get('input[placeholder="Number of questions"]').type('{selectall}2');
 
+		cy.wait(1000);
+
 		//Start the game
 		cy.get('button').contains('START GAME').click();
 
@@ -22,5 +24,7 @@ describe('Prueba game', () => {
 		cy.get('h3')
 			.contains(Cypress.env('auth0_username') + ' won the quiz!')
 			.should('exist');
+
+		cy.get('button').contains('BACK HOME').click();
 	});
 });

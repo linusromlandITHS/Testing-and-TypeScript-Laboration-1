@@ -68,7 +68,7 @@ export default function Leaderboard({ game, socket }: { game: GameInformation; s
 					onClick={(): void => {
 						navigate('/');
 					}}
-					text="Back home"
+					text="BACK HOME"
 					small
 				/>
 			)}
