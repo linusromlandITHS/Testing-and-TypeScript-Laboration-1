@@ -1,7 +1,6 @@
 {
 	"name": "linus-romland-testing-typescipt-quiz-app",
 	"version": "0.0.0",
-	"type": "module",
 	"workspaces": [
 		"apps/*",
 		"packages/*"
@@ -11,13 +10,18 @@
 		"dev": "turbo run dev --parallel",
 		"lint": "turbo run lint",
 		"format": "prettier --write .",
-		"test": "turbo run test"
+		"test": "turbo run test",
+		"cy:open": "cypress open",
+		"cy:run": "cypress run"
 	},
 	"devDependencies": {
+		"cypress": "^12.2.0",
 		"eslint": "^8.29.0",
 		"eslint-config-custom": "*",
 		"prettier": "latest",
-		"turbo": "latest"
+		"ts-node": "^10.9.1",
+		"turbo": "latest",
+		"wait-on": "^7.0.1"
 	},
 	"engines": {
 		"node": ">=14.0.0"
