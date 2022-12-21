@@ -82,4 +82,6 @@ If you want to run the tests you need to do the following:
 </details>
 <br/>
 
+6. To make the account work, you need to manually login with the account one time before using it in tests. To do this, navigate as normal to the page (http://127.0.0.1:3000/). Then choose to login with username and password instead of google. Accept access to the profile for the test account. Once you are logged in, the account is fully set up and you can now run all of the test.
+
 This is all you need to do to setup Auth0 for the project. You should now be able to run the project and the tests.
