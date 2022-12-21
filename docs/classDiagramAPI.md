@@ -14,7 +14,7 @@ classDiagram
     class AuthGuard{
       +canActivate(ExecutionContext context) Promise~boolean~
     }
-    AuthGuard --|> main
+    AuthGuard --|> AppModule
 
     class HealthModule
     class HealthController{
