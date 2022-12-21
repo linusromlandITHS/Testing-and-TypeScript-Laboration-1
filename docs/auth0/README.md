@@ -25,7 +25,7 @@ To create an Auth0 application you need to follow the steps below:
 </details>
 <br/>
 
-4. Go to the "Settings" tab and add the url it will be running on (default is http://localhost:3000) to the "Allowed Callback URLs", "Allowed Logout URLs" and "Allowed Web Origins" fields.
+4. Go to the "Settings" tab and add the url it will be running on (default is `http://127.0.0.1:3000`, make sure to use `http://127.0.0.1:3000`. The tests will fail if using `http://localhost:3000`.) to the "Allowed Callback URLs", "Allowed Logout URLs" and "Allowed Web Origins" fields.
 
 <details>
 <summary>show/hide image</summary>
