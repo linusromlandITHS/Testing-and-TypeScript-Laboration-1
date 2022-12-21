@@ -51,7 +51,7 @@ export default function Leaderboard({ game, socket }: { game: GameInformation; s
 							gamePin: game.id
 						});
 					}}
-					text="Next question"
+					text="NEXT QUESTION"
 					small
 				/>
 			)}

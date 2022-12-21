@@ -7,5 +7,11 @@ declare namespace Cypress {
 		 * @example cy.loginToAuth0()
 		 */
 		loginToAuth0(username: string, password: string): Chainable<null>;
+
+		/**
+		 * Custom command to answer question
+		 * @example cy.answerQuestion()
+		 */
+		answerQuestion(): Chainable<null>;
 	}
 }

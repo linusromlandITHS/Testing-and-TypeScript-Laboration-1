@@ -22,12 +22,12 @@ export default function routes(): JSX.Element {
 			if (idToken) {
 				setToken(idToken);
 				api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
-				localStorage.setItem('token', idToken);
+				window.localStorage.setItem('token', idToken);
 				return true;
 			} else {
 				setToken('');
 				api.defaults.headers.common.Authorization = '';
-				localStorage.removeItem('token');
+				window.localStorage.removeItem('token');
 				return false;
 			}
 		} catch (error) {

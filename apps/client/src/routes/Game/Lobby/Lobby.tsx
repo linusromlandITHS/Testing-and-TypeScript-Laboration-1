@@ -206,7 +206,7 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 			)}
 			<div className={style.buttons}>
 				<Button
-					text="Back"
+					text="BACK"
 					onClick={(): void => {
 						navigate('/');
 					}}
@@ -215,7 +215,7 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 				/>
 				{host ? (
 					<Button
-						text="Start Game"
+						text="START GAME"
 						onClick={(): void => {
 							//View toast if not everyone is ready
 							if (players.some((player: Player) => player.status === PlayerStatus.NOT_READY)) {
@@ -235,8 +235,8 @@ export default function Lobby({ game, socket }: { game: GameInformation; socket:
 					<Button
 						text={
 							game && game.players.find((player: Player) => player.email === user?.email)?.status === PlayerStatus.READY
-								? 'Not Ready'
-								: 'Ready'
+								? 'NOT READY'
+								: 'READY'
 						}
 						onClick={(): void => {
 							if (!game) return;

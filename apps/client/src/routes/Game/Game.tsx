@@ -26,11 +26,7 @@ import Lobby from './Lobby/Lobby';
 import Question from './Question/Question';
 import Leaderboard from './Leaderboard/Leaderboard';
 
-const socket: Socket = io(API_URL, {
-	extraHeaders: {
-		Authorization: `Bearer ${localStorage.getItem('token')}`
-	}
-});
+let socket: Socket;
 
 export default function Game(): JSX.Element {
 	const navigate: NavigateFunction = useNavigate();
@@ -48,11 +44,6 @@ export default function Game(): JSX.Element {
 			if (!retrievedGame || 'statusCode' in retrievedGame) return navigate('/');
 			setGame(retrievedGame as GameInformation);
 		})();
-
-		return (): void => {
-			socket.off(gamePin);
-			socket.disconnect();
-		};
 	}, [gamePin]);
 
 	useEffect(() => {
@@ -78,6 +69,13 @@ export default function Game(): JSX.Element {
 	}, [game]);
 
 	function initSocket(): void {
+		console.log(window.localStorage.getItem('token'));
+		socket = io(API_URL, {
+			extraHeaders: {
+				Authorization: `Bearer ${window.localStorage.getItem('token')}`
+			}
+		});
+
 		if (!gamePin) return;
 		socket.on(gamePin, (data: string): void => {
 			setGame(JSON.parse(data));
@@ -85,6 +83,8 @@ export default function Game(): JSX.Element {
 
 		socket.emit('events', { event: 'joinGame', gamePin });
 	}
+
+	if (!socket) return <></>;
 
 	return (
 		<Routes>

@@ -12,9 +12,7 @@ export default defineConfig({
 		auth0_username: process.env.AUTH0_TEST_USERNAME,
 		auth0_password: process.env.AUTH0_TEST_PASSWORD,
 		auth0_domain: process.env.PUB_AUTH0_DOMAIN,
-		auth0_scope: 'openid profile email',
-		auth0_client_id: process.env.PUB_AUTH0_CLIENT_ID,
-		auth0_client_secret: process.env.AUTH0_CLIENT_SECRET
+		APP_URL: 'http://127.0.0.1:3000/'
 	},
 	trashAssetsBeforeRuns: false,
 	e2e: {
